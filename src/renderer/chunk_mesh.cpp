@@ -5,7 +5,7 @@ ChunkMesh::ChunkMesh(const std::vector<Block> &blocks){
     this->blocks = blocks;
 }
 
-void ChunkMesh::build(GLuint &texture){
+void ChunkMesh::build(){
     for(const auto &block: blocks){
         for(int i = 0; i < 108; i+=3){
             vertices.push_back(vertex_buffer[i] + (float) block.get_x());
@@ -25,7 +25,7 @@ void ChunkMesh::build(GLuint &texture){
     tBuff = new GLfloat[texture_size];
     for(int i = 0; i < vertices_size; i++){
         vBuff[i] = vertices.at(i);
-        std::cout << "T: " << tBuff[i] << "\tI: " << i << std::endl;
+        //std::cout << "T: " << tBuff[i] << "\tI: " << i << std::endl;
     }
 
     for(int i = 0; i < texture_size; i++){

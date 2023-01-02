@@ -11,7 +11,7 @@ out vec3 fragmentColor;
 out vec2 TexCoord;
 
 void main(){
-    gl_Position = MVP * vec4(vertexPosition_modelspace, 1);  
+    gl_Position = MVP * vec4(vertexPosition_modelspace, 1.0f);  
 
     fragmentColor = vertexColor;
 

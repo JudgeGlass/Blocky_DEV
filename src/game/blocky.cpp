@@ -10,6 +10,10 @@ void glfw_window_size_callback(GLFWwindow *window, int width, int height){
     glViewport(0, 0, width, height);
 }
 
+void glfw_keyboard_callback(GLFWwindow *window, int key, int scancode, int action, int mods){
+
+}
+
 Blocky::Blocky(const int width, const int height){
     renderer = new Renderer(this);
 
@@ -47,6 +51,7 @@ void Blocky::init(){
     }
 
     glfwSetWindowSizeCallback(window, glfw_window_size_callback);
+    glfwSetKeyCallback(window, glfw_keyboard_callback);
     
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
@@ -67,6 +72,10 @@ void Blocky::loop(){
 void Blocky::clean(){
     glfwTerminate();
     delete renderer;
+}
+
+GLFWwindow* Blocky::get_window() const {
+    return window;
 }
 
 int Blocky::get_screen_width() const {

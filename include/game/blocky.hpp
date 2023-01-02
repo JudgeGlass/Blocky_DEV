@@ -10,6 +10,7 @@
 
 static void glfw_error_callback(int error, const char *msg);
 static void glfw_window_size_callback(GLFWwindow *window, int width, int height);
+static void glfw_keyboard_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
 
 class Renderer;
 class Blocky{
@@ -23,6 +24,8 @@ class Blocky{
 
         int get_screen_width() const;
         int get_screen_height() const;
+
+        GLFWwindow* get_window() const;
 
     private: 
         int screen_width;

@@ -74,12 +74,12 @@ static const GLfloat texture_buffer[] = {
     0.125f, 0.0f,
     0.0625f, 0.0f,
 
-    0.125f, 0.0f,
-    0.125f, 0.0625f,
-    0.1875f, 0.0625f,
-    0.1875f, 0.0625f,
-    0.1875f, 0.f,
-    0.125f, 0.f,
+    3.0f/16.0f, 0.0f, // BOTTOM
+    3.0f/16.0f, 1.0f/16.0f,
+    4.0f/16.0f, 1.0f/16.0f,
+    4.0f/16.0f, 1.0f/16.0f,
+    4.0f/16.0f, 0.0f,
+    3.0f/16.0f, 0.0f,
 
     0.125f, 0.0f,
     0.125f, 0.0625f,
@@ -93,14 +93,14 @@ static const GLfloat texture_buffer[] = {
     0.1875f, 0.0625f,
     0.1875f, 0.0625f,
     0.1875f, 0.f,
-    0.125f, 0.f,
+    0.125f, 0.f
 };
 
 class ChunkMesh{
     public:
         ChunkMesh(const std::vector<Block> &blocks);
 
-        void build(GLuint &texture);
+        void build();
 
         void render(GLuint &texture);
     private:

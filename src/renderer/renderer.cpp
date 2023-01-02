@@ -11,8 +11,10 @@ void Renderer::init(){
     blocks.push_back(Block(2, 0, 0, 0));
     blocks.push_back(Block(1, 1, 0, 0));
     blocks.push_back(Block(1, 2, 0, 0));
+    blocks.push_back(Block(1, 3, 0, 0));
+    blocks.push_back(Block(1, 4, 0, 0));
 
-    chunk_mesh = new ChunkMesh(blocks);
+    chunk = new Chunk(0, 0, 16, 16, 255);
     
 
     shader = new Shader("vertex.shader", "fragment.shader");
@@ -22,19 +24,6 @@ void Renderer::init(){
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
-
-    // //Make VAO
-    // glGenVertexArrays(1, &VAO);
-    // glBindVertexArray(VAO); // USE VAO
-
-    // // Make VBO
-    // glGenBuffers(1, &VBO);
-    // glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    // glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 108, vertex_buffer, GL_STATIC_DRAW); // Give VBO data
-
-    // glGenBuffers(1, &CBO);
-    // glBindBuffer(GL_ARRAY_BUFFER, CBO);
-    // glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 108, color_buffer, GL_STATIC_DRAW); // Give CBO data
 
     // Make Texture
     int width, height, nrChannels;
@@ -51,51 +40,56 @@ void Renderer::init(){
     glGenerateMipmap(GL_TEXTURE_2D);
     stbi_image_free(data);
 
-    // glGenBuffers(1, &UVBO);
-    // glBindBuffer(GL_ARRAY_BUFFER, UVBO);
-    // glBufferData(GL_ARRAY_BUFFER, sizeof(texture_buffer), texture_buffer, GL_STATIC_DRAW);
+    chunk->generate();
+}
 
-    chunk_mesh->build(texture);
+void Renderer::input(){
+    const float cameraSpeed = 0.05f; // adjust accordingly
+    if (glfwGetKey(game->get_window(), GLFW_KEY_W) == GLFW_PRESS)
+        cameraPos += cameraSpeed * cameraFront;
+    if (glfwGetKey(game->get_window(), GLFW_KEY_S) == GLFW_PRESS)
+        cameraPos -= cameraSpeed * cameraFront;
+    if (glfwGetKey(game->get_window(), GLFW_KEY_A) == GLFW_PRESS)
+        cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+    if (glfwGetKey(game->get_window(), GLFW_KEY_D) == GLFW_PRESS)
+        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+    if(glfwGetKey(game->get_window(), GLFW_KEY_SPACE) == GLFW_PRESS)
+        cameraPos += cameraSpeed * cameraUp;
+    if(glfwGetKey(game->get_window(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+        cameraPos -= cameraSpeed * cameraUp;
 }
 
 float counter = 0;
 void Renderer::draw(){
+    input();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glm::mat4 projection = glm::perspective(glm::radians(40.0f + (float)(40*abs(sin(counter)))), (float)game->get_screen_width() / (float)game->get_screen_height(), 0.1f, 100.0f);
-    glm::mat4 view = glm::lookAt(glm::vec3(4, 3, 10), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-    glm::mat4 rotation = glm::rotate(counter, glm::vec3(4, 3, 3));
+    glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)game->get_screen_width() / (float)game->get_screen_height(), 0.1f, 100.0f);
+    // glm::mat4 view = glm::lookAt(glm::vec3(4, 3, 10), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+    glm::mat4 rotation = glm::rotate(counter, glm::vec3(4, 0, 3));
     glm::mat4 model = glm::mat4(1.0f);
-    glm::mat4 mvp = projection * view * model * rotation;
+    // glm::mat4 mvp = projection * view * model * rotation;
+    // GLuint matrixID = shader->get_uniform_location("MVP");
+    // glUniformMatrix4fv(matrixID, 1, GL_FALSE, &mvp[0][0]);
+    
+    // glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+    // glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+    // glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
+    // glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+    // glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
+    // glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
+
+
+    glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+    glm::mat4 MVP = projection * view * model;
     GLuint matrixID = shader->get_uniform_location("MVP");
-    glUniformMatrix4fv(matrixID, 1, GL_FALSE, &mvp[0][0]);
+    glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0]);
+
 
     glUseProgram(shader->get_program_id());
-    // glEnableVertexAttribArray(0);
-
-    // glActiveTexture(GL_TEXTURE0);
-    // glBindTexture(GL_TEXTURE_2D, texture);
-    // glUniform1i(texture, 0);
-
-    // // Vertex data
-    // glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void *) 0);
-
-    // // Color data
-    // glEnableVertexAttribArray(1);
-    // glBindBuffer(GL_ARRAY_BUFFER, CBO);
-    // glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void *) 0);
-
-    // // Texture data
-    // glEnableVertexAttribArray(2);
-    // glBindBuffer(GL_ARRAY_BUFFER, UVBO);
-    // glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void *) 0);
-
-    // glDrawArrays(GL_TRIANGLES, 0, 108 / 3);
-    // glDisableVertexAttribArray(0);
     counter += 0.02f;
 
-    chunk_mesh->render(texture);
+    chunk->render(texture);
 }
 
 Renderer::~Renderer(){
