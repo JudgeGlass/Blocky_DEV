@@ -5,10 +5,10 @@ out vec4 color;
 
 in vec2 TexCoord;
 
-uniform sampler2D ourTexture;
+uniform sampler2D blockTexture;
 
 void main(){
-    color = texture(ourTexture, TexCoord);
+    color = texture(blockTexture, TexCoord);
 
     
 }
