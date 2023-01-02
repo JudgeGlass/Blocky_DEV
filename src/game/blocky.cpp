@@ -65,9 +65,8 @@ void Blocky::loop(){
 }
 
 void Blocky::clean(){
-    delete renderer;
-
     glfwTerminate();
+    delete renderer;
 }
 
 int Blocky::get_screen_width() const {

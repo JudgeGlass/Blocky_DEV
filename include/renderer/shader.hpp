@@ -12,7 +12,8 @@
 class Shader{
     public:
         Shader(const std::string vertex_file, const std::string fragment_file);
-
+        ~Shader();
+        
         void load_shader();
 
         GLuint get_program_id();

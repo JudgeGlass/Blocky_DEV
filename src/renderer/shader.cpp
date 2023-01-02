@@ -98,3 +98,7 @@ GLuint Shader::get_program_id(){
 GLuint Shader::get_uniform_location(const std::string name){
     return glGetUniformLocation(program_id, name.c_str());
 }
+
+Shader::~Shader(){
+	glDeleteProgram(program_id);
+}

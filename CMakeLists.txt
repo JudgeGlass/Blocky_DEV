@@ -15,4 +15,6 @@ add_executable(blocky
 
     src/renderer/shader.cpp
     src/renderer/renderer.cpp
+
+    src/world/chunk.cpp
 )
