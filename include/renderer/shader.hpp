@@ -16,8 +16,12 @@ class Shader{
         void load_shader();
 
         GLuint get_program_id();
+        GLuint get_uniform_location(const std::string name);
 
     private:
+        const std::string vertex_file;
+        const std::string fragment_file;
+
         GLuint vertex_shader_id;
         GLuint fragment_shader_id;
         GLuint program_id;
