@@ -11,6 +11,8 @@ void glfw_window_size_callback(GLFWwindow *window, int width, int height){
 }
 
 Blocky::Blocky(const int width, const int height){
+    renderer = new Renderer(this);
+
     screen_width = width;
     screen_height = height;
 }
@@ -45,11 +47,15 @@ void Blocky::init(){
     }
 
     glfwSetWindowSizeCallback(window, glfw_window_size_callback);
+    
+    glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+
+    renderer->init();
 }
 
 void Blocky::loop(){
     while(glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(window) == 0){
-        glClear(GL_COLOR_BUFFER_BIT);
+        renderer->draw();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -59,6 +65,8 @@ void Blocky::loop(){
 }
 
 void Blocky::clean(){
+    delete renderer;
+
     glfwTerminate();
 }
 

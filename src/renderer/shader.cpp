@@ -8,6 +8,7 @@ vertex_file(vertex_file), fragment_file(fragment_file) {
 void Shader::load_shader(){
     vertex_shader_id = glCreateShader(GL_VERTEX_SHADER);
 	fragment_shader_id = glCreateShader(GL_FRAGMENT_SHADER);
+	
 
 	// Read the Vertex Shader code from the file
 	std::string VertexShaderCode;
@@ -65,18 +66,14 @@ void Shader::load_shader(){
 		glGetShaderInfoLog(fragment_shader_id, InfoLogLength, NULL, &FragmentShaderErrorMessage[0]);
 		printf("%s\n", &FragmentShaderErrorMessage[0]);
 	}
-}
 
-GLuint Shader::get_program_id(){
-    std::cout << "Linking program" << std::endl;
+	std::cout << "Linking program" << std::endl;
 	GLuint ProgramID = glCreateProgram();
 	glAttachShader(ProgramID, vertex_shader_id);
 	glAttachShader(ProgramID, fragment_shader_id);
 	glLinkProgram(ProgramID);
 
 	// Check the program
-    GLint Result = GL_FALSE;
-    int InfoLogLength;
 	glGetProgramiv(ProgramID, GL_LINK_STATUS, &Result);
 	glGetProgramiv(ProgramID, GL_INFO_LOG_LENGTH, &InfoLogLength);
 	if ( InfoLogLength > 0 ){
@@ -91,7 +88,11 @@ GLuint Shader::get_program_id(){
 	glDeleteShader(vertex_shader_id);
 	glDeleteShader(fragment_shader_id);
 
-	return ProgramID;
+	program_id = ProgramID;
+}
+
+GLuint Shader::get_program_id(){
+	return program_id;
 }
 
 GLuint Shader::get_uniform_location(const std::string name){

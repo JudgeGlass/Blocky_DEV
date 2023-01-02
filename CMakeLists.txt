@@ -14,4 +14,5 @@ add_executable(blocky
     src/game/blocky.cpp
 
     src/renderer/shader.cpp
+    src/renderer/renderer.cpp
 )

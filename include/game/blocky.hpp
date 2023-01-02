@@ -6,9 +6,12 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include <renderer/renderer.hpp>
+
 static void glfw_error_callback(int error, const char *msg);
 static void glfw_window_size_callback(GLFWwindow *window, int width, int height);
 
+class Renderer;
 class Blocky{
     public:
         Blocky(const int width, const int height);
@@ -26,6 +29,8 @@ class Blocky{
         int screen_height;
 
         GLFWwindow *window = nullptr;
+
+        Renderer *renderer = nullptr;
 
 };
 
