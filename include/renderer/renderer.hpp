@@ -28,6 +28,7 @@ class Renderer{
         Shader *shader = nullptr;
 
         Chunk *chunk; // REMOVE
+        Chunk *chunk2; // REMOVE
         
         GLuint texture;
 

@@ -5,16 +5,8 @@ Renderer::Renderer(Blocky *game){
 }
 
 void Renderer::init(){
-    std::vector<Block> blocks;
-    blocks.push_back(Block(0, 0, 0, 0));
-    blocks.push_back(Block(1, 0, 0, 0));
-    blocks.push_back(Block(2, 0, 0, 0));
-    blocks.push_back(Block(1, 1, 0, 0));
-    blocks.push_back(Block(1, 2, 0, 0));
-    blocks.push_back(Block(1, 3, 0, 0));
-    blocks.push_back(Block(1, 4, 0, 0));
-
-    chunk = new Chunk(0, 0, 16, 16, 255);
+    chunk = new Chunk(0, 0, 15, 15, 255);
+    chunk2 = new Chunk(1, 0, 15, 15, 255);
     
 
     shader = new Shader("vertex.shader", "fragment.shader");
@@ -41,6 +33,7 @@ void Renderer::init(){
     stbi_image_free(data);
 
     chunk->generate();
+    chunk2->generate();
 }
 
 void Renderer::input(){
@@ -90,6 +83,7 @@ void Renderer::draw(){
     counter += 0.02f;
 
     chunk->render(texture);
+    chunk2->render(texture);
 }
 
 Renderer::~Renderer(){

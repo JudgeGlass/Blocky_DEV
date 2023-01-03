@@ -7,22 +7,78 @@
 
 #include <world/block.hpp>
 
-static const GLfloat vertex_buffer[] = { // JUST FOR TESTING!
+static const GLfloat cube_vertex_right[] = {
+    0.5f,0.5f,-0.5f, // RIGHT 
+    0.5f,-0.5f,-0.5f,
+    0.5f,-0.5f,0.5f,
+    0.5f,-0.5f,0.5f,
+    0.5f,0.5f,0.5f,
+    0.5f,0.5f,-0.5f
+};
+
+static const GLfloat cube_vertex_left[] = {
+    -0.5f,0.5f,-0.5f, // Left
+    -0.5f,-0.5f,-0.5f,
+    -0.5f,-0.5f,0.5f,
+    -0.5f,-0.5f,0.5f,
+    -0.5f,0.5f,0.5f,
+    -0.5f,0.5f,-0.5f
+};
+
+static const GLfloat cube_vertex_top[] = {
+    -0.5f,0.5f,0.5f, // TOP
+    -0.5f,0.5f,-0.5f,
     0.5f,0.5f,-0.5f,
+    0.5f,0.5f,-0.5f,
+    0.5f,0.5f,0.5f,
+    -0.5f,0.5f,0.5f
+};
+
+static const GLfloat cube_vertex_bottom[] = {
+    -0.5f,-0.5f,0.5f, // BOTTOM
+    -0.5f,-0.5f,-0.5f,
+     0.5f,-0.5f,-0.5f,
+     0.5f,-0.5f,-0.5f,
+     0.5f,-0.5f,0.5f,
+    -0.5f,-0.5f,0.5f
+};
+
+static const GLfloat cube_vertex_front[] = {
+    -0.5f,0.5f,0.5f, // FRONT
+    -0.5f,-0.5f,0.5f,
+    0.5f,-0.5f,0.5f,
+    0.5f,-0.5f,0.5f,
+    0.5f,0.5f,0.5f,
+    -0.5f,0.5f,0.5f
+};
+
+static const GLfloat cube_vertex_back[] = {
+    -0.5f,0.5f,-0.5f, // BACK
+    -0.5f,-0.5f,-0.5f,
+    0.5f,-0.5f,-0.5f,
+    0.5f,-0.5f,-0.5f,
+    0.5f,0.5f,-0.5f,
+    -0.5f,0.5f,-0.5f
+};
+
+
+
+static const GLfloat vertex_buffer[] = { // JUST FOR TESTING!
+    0.5f,0.5f,-0.5f, // RIGHT 
     0.5f,-0.5f,-0.5f,
     0.5f,-0.5f,0.5f,
     0.5f,-0.5f,0.5f,
     0.5f,0.5f,0.5f,
     0.5f,0.5f,-0.5f,
 
-    -0.5f,0.5f,-0.5f,
+    -0.5f,0.5f,-0.5f, // Left
     -0.5f,-0.5f,-0.5f,
     -0.5f,-0.5f,0.5f,
     -0.5f,-0.5f,0.5f,
     -0.5f,0.5f,0.5f,
     -0.5f,0.5f,-0.5f,
 
-    -0.5f,0.5f,0.5f,
+    -0.5f,0.5f,0.5f, // TOP
     -0.5f,0.5f,-0.5f,
     0.5f,0.5f,-0.5f,
     0.5f,0.5f,-0.5f,
@@ -30,21 +86,21 @@ static const GLfloat vertex_buffer[] = { // JUST FOR TESTING!
     -0.5f,0.5f,0.5f,
 
 
-    -0.5f,-0.5f,0.5f,
+    -0.5f,-0.5f,0.5f, // BOTTOM
     -0.5f,-0.5f,-0.5f,
      0.5f,-0.5f,-0.5f,
      0.5f,-0.5f,-0.5f,
      0.5f,-0.5f,0.5f,
     -0.5f,-0.5f,0.5f,
 
-    -0.5f,0.5f,0.5f,
+    -0.5f,0.5f,0.5f, // FRONT
     -0.5f,-0.5f,0.5f,
     0.5f,-0.5f,0.5f,
     0.5f,-0.5f,0.5f,
     0.5f,0.5f,0.5f,
     -0.5f,0.5f,0.5f,
 
-    -0.5f,0.5f,-0.5f,
+    -0.5f,0.5f,-0.5f, // BACK
     -0.5f,-0.5f,-0.5f,
     0.5f,-0.5f,-0.5f,
     0.5f,-0.5f,-0.5f,
@@ -53,14 +109,14 @@ static const GLfloat vertex_buffer[] = { // JUST FOR TESTING!
 };
 
 static const GLfloat texture_buffer[] = {
-    0.125f, 0.0f,
+    0.125f, 0.0f,   // RIGHT
     0.125f, 0.0625f,
     0.1875f, 0.0625f,
     0.1875f, 0.0625f,
     0.1875f, 0.f,
     0.125f, 0.f,
 
-    0.125f, 0.0f,
+    0.125f, 0.0f, // LEFT
     0.125f, 0.0625f,
     0.1875f, 0.0625f,
     0.1875f, 0.0625f,
@@ -81,14 +137,14 @@ static const GLfloat texture_buffer[] = {
     4.0f/16.0f, 0.0f,
     3.0f/16.0f, 0.0f,
 
-    0.125f, 0.0f,
+    0.125f, 0.0f, // FRONT
     0.125f, 0.0625f,
     0.1875f, 0.0625f,
     0.1875f, 0.0625f,
     0.1875f, 0.f,
     0.125f, 0.f,
 
-    0.125f, 0.0f,
+    0.125f, 0.0f,   // BACK
     0.125f, 0.0625f,
     0.1875f, 0.0625f,
     0.1875f, 0.0625f,
@@ -98,12 +154,17 @@ static const GLfloat texture_buffer[] = {
 
 class ChunkMesh{
     public:
-        ChunkMesh(const std::vector<Block> &blocks);
+        ChunkMesh(const std::vector<Block> &blocks, int cx, int cz);
 
         void build();
 
         void render(GLuint &texture);
+
+        void add_texture();
+        bool is_transparent(int x, int y, int z);
     private:
+        int cx;
+        int cz;
         std::vector<Block> blocks;
         std::vector<GLfloat> vertices;
         std::vector<GLfloat> texture_coords;
