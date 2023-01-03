@@ -37,6 +37,7 @@ void Renderer::init(){
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
+    glEnable(GL_ALPHA_TEST);
 }
 
 void Renderer::input(){
@@ -59,6 +60,10 @@ float counter = 0;
 void Renderer::draw(){
     input();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(0.4f, 0.7f, 1.0f, 1);
+
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
 
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)game->get_screen_width() / (float)game->get_screen_height(), 0.1f, 100.0f);
     glm::mat4 model = glm::mat4(1.0f);

@@ -1,5 +1,4 @@
 #include <renderer/chunk_mesh.hpp>
-#include <iostream>
 
 ChunkMesh::ChunkMesh(const std::vector<Block> &blocks, int cx, int cz){
     this->blocks = blocks;

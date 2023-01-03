@@ -8,16 +8,16 @@
 #include <world/block.hpp>
 #include <renderer/texture.hpp>
 
-static const GLfloat cube_vertex_right[] = {
-    0.5f,0.5f,-0.5f, // RIGHT 
+static const GLfloat cube_vertex_right[] = { // CCW
+    0.5f,-0.5f,0.5f,
     0.5f,-0.5f,-0.5f,
-    0.5f,-0.5f,0.5f,
-    0.5f,-0.5f,0.5f,
+    0.5f,0.5f,-0.5f, // RIGHT 
+    0.5f,0.5f,-0.5f,
     0.5f,0.5f,0.5f,
-    0.5f,0.5f,-0.5f
+    0.5f,-0.5f,0.5f
 };
 
-static const GLfloat cube_vertex_left[] = {
+static const GLfloat cube_vertex_left[] = { // CCW
     -0.5f,0.5f,-0.5f, // Left
     -0.5f,-0.5f,-0.5f,
     -0.5f,-0.5f,0.5f,
@@ -26,26 +26,28 @@ static const GLfloat cube_vertex_left[] = {
     -0.5f,0.5f,-0.5f
 };
 
-static const GLfloat cube_vertex_top[] = {
-    -0.5f,0.5f,0.5f, // TOP
+static const GLfloat cube_vertex_top[] = { // CCW
+    0.5f,0.5f,-0.5f,
     -0.5f,0.5f,-0.5f,
-    0.5f,0.5f,-0.5f,
-    0.5f,0.5f,-0.5f,
+    -0.5f,0.5f,0.5f,
+    -0.5f,0.5f,0.5f,
     0.5f,0.5f,0.5f,
-    -0.5f,0.5f,0.5f
+    0.5f,0.5f,-0.5f,
+    
+    
 };
 
-static const GLfloat cube_vertex_bottom[] = {
-    -0.5f,-0.5f,0.5f, // BOTTOM
+static const GLfloat cube_vertex_bottom[] = { // CCW
+    0.5f,-0.5f,-0.5f,
     -0.5f,-0.5f,-0.5f,
-     0.5f,-0.5f,-0.5f,
-     0.5f,-0.5f,-0.5f,
-     0.5f,-0.5f,0.5f,
-    -0.5f,-0.5f,0.5f
+    -0.5f,-0.5f,0.5f, 
+    -0.5f,-0.5f,0.5f,
+    0.5f,-0.5f,0.5f,
+     0.5f,-0.5f,-0.5f
 };
 
-static const GLfloat cube_vertex_front[] = {
-    -0.5f,0.5f,0.5f, // FRONT
+static const GLfloat cube_vertex_front[] = { //CCW
+    -0.5f,0.5f,0.5f,
     -0.5f,-0.5f,0.5f,
     0.5f,-0.5f,0.5f,
     0.5f,-0.5f,0.5f,
@@ -53,7 +55,7 @@ static const GLfloat cube_vertex_front[] = {
     -0.5f,0.5f,0.5f
 };
 
-static const GLfloat cube_vertex_back[] = {
+static const GLfloat cube_vertex_back[] = { //CCW
     -0.5f,0.5f,-0.5f, // BACK
     -0.5f,-0.5f,-0.5f,
     0.5f,-0.5f,-0.5f,
