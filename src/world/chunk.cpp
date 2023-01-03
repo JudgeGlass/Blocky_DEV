@@ -18,16 +18,22 @@ Chunk::~Chunk(){
 void Chunk::generate(){
     srand(time(NULL));
     std::cout << "Building terrain..." << std::endl;
-    std::cout << "CX: " << cx << "\tCY: " << cz << "\tCW: " << cw << "\tCL: " << cl << "\tCH: " << ch << std::endl; 
-    for(int x = 0; x < cw; x++){
-        for(int y = 0; y < ch; y++){
-            for(int z = 0; z < cl; z++){
-                if(rand() % 10 == 0){
+    std::cout << "CX: " << cx << "\tCY: " << cz << "\tCW: " << cw << "\tCL: " << cl << "\tCH: " << std::to_string(ch) << std::endl; 
+    for(int x = 0; x < cw+1; x++){
+        for(int y = 0; y < ch+1; y++){
+            for(int z = 0; z < cl+1; z++){
+                if(y > 55){
                     blocks.push_back(Block(x, y, z, 0));
-                    continue;
+                }else{
+                    blocks.push_back(Block(x, y, z, 1));
                 }
 
-                blocks.push_back(Block(x, y, z, 1));
+                // if(rand() % 10 == 0){
+                //     blocks.push_back(Block(x, y, z, 0));
+                //     continue;
+                // }
+
+                
             }
         }
     }

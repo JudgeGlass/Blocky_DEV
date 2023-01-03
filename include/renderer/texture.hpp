@@ -93,6 +93,12 @@ static const GLfloat texture_uv_stone[] = {
     1.0f/16.0f, 1.0f/16.0f,
     1.0f/16.0f, 0.0f,
     0.0f, 0.0f,
+    0.0f, 0.0f,
+    0.0f, 1.0f/16.0f,
+    1.0f/16.0f, 1.0f/16.0f,
+    1.0f/16.0f, 1.0f/16.0f,
+    1.0f/16.0f, 0.0f,
+    0.0f, 0.0f
 };
 
 static void add_texture_face(const unsigned char &block, Face face, std::vector<GLfloat> &texture_coords){
@@ -133,7 +139,8 @@ static void add_texture_face(const unsigned char &block, Face face, std::vector<
             texture_coords.push_back(texture_uv_grass[i]);
             break;
         case 2:
-            texture_coords.push_back(texture_uv_stone[offset]);
+            texture_coords.push_back(texture_uv_stone[i]);
+            break;
         
         default:
             return;

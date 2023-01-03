@@ -11,7 +11,7 @@ bool ChunkMesh::is_transparent(int x, int y, int z){
     if(y < 0 || y > 255 || x < 0 || x > 15 || z < 0 || z > 15) return 1;
 
 
-    Block b = blocks.at(x + 15 * (y + 15 * z));
+    Block b = blocks.at(x + y * 16 + z * 16 * 256);
     switch (b.get_type())
     {
     case 0:
@@ -26,7 +26,7 @@ void ChunkMesh::build(){
     for(int x = 0; x < 16; x++){
         for(int y = 0; y< 256; y++){
             for(int z = 0; z < 16; z++){
-                Block b = blocks.at(x + 15 * (y + 15 * z));
+                Block b = blocks.at(x + y * 16 + z * 16 * 256);//blocks.at(x + 16 * (y + 16 * z));
                 
                 if(b.get_type() == 0) continue;
 
@@ -93,9 +93,6 @@ void ChunkMesh::build(){
             }
         }
     }
-
-
-
 
     vertices_size = vertices.size();
     texture_size = texture_coords.size();
