@@ -6,11 +6,14 @@ ChunkMesh::ChunkMesh(const std::vector<Block> &blocks, int cx, int cz){
     this->cz = cz;
 }
 
-bool ChunkMesh::is_transparent(int x, int y, int z){
+bool ChunkMesh::is_transparent(int x, int y, int z, unsigned char block_id){
     if(y < 0 || y > 255 || x < 0 || x > 15 || z < 0 || z > 15) return 1;
 
 
     Block b = blocks.at(x + y * 16 + z * 16 * 256);
+
+    if(b.get_type() == 20 && block_id == 20) return 0; 
+
     switch (b.get_type())
     {
     case 0:
@@ -30,7 +33,9 @@ void ChunkMesh::build(){
                 
                 if(b.get_type() == 0) continue;
 
-                if(is_transparent(x - 1, y, z)){
+                bool isGlass = (b.get_type() == 20);
+
+                if(is_transparent(x - 1, y, z, b.get_type())){
                     for(int i = 0; i < 18; i+=3){
                         vertices.push_back(cube_vertex_left[i] + x + (cx * 16));
                         vertices.push_back(cube_vertex_left[i + 1] + y);
@@ -40,7 +45,7 @@ void ChunkMesh::build(){
                     add_texture_face(b.get_type(), Face::LEFT, texture_coords);
                 }
 
-                if(is_transparent(x + 1, y, z)){
+                if(is_transparent(x + 1, y, z, b.get_type())){
                     for(int i = 0; i < 18; i+=3){
                         vertices.push_back(cube_vertex_right[i] + x + (cx * 16));
                         vertices.push_back(cube_vertex_right[i + 1] + y);
@@ -50,7 +55,7 @@ void ChunkMesh::build(){
                     add_texture_face(b.get_type(), Face::RIGHT, texture_coords);
                 }
 
-                if(is_transparent(x, y - 1, z)){
+                if(is_transparent(x, y - 1, z, b.get_type())){
                     for(int i = 0; i < 18; i+=3){
                         vertices.push_back(cube_vertex_bottom[i] + x + (cx * 16));
                         vertices.push_back(cube_vertex_bottom[i + 1] + y);
@@ -60,7 +65,7 @@ void ChunkMesh::build(){
                     add_texture_face(b.get_type(), Face::BOTTOM, texture_coords);
                 }
 
-                if(is_transparent(x, y + 1, z)){
+                if(is_transparent(x, y + 1, z, b.get_type())){
                     for(int i = 0; i < 18; i+=3){
                         vertices.push_back(cube_vertex_top[i] + x + (cx * 16));
                         vertices.push_back(cube_vertex_top[i + 1] + y);
@@ -70,7 +75,7 @@ void ChunkMesh::build(){
                     add_texture_face(b.get_type(), Face::TOP, texture_coords);
                 }
 
-                if(is_transparent(x, y, z - 1)){
+                if(is_transparent(x, y, z - 1, b.get_type())){
                     for(int i = 0; i < 18; i+=3){
                         vertices.push_back(cube_vertex_back[i] + x + (cx * 16));
                         vertices.push_back(cube_vertex_back[i + 1] + y);
@@ -80,7 +85,7 @@ void ChunkMesh::build(){
                     add_texture_face(b.get_type(), Face::BACK, texture_coords);
                 }
 
-                if(is_transparent(x, y, z + 1)){
+                if(is_transparent(x, y, z + 1, b.get_type())){
                     for(int i = 0; i < 18; i+=3){
                         vertices.push_back(cube_vertex_front[i] + x + (cx * 16));
                         vertices.push_back(cube_vertex_front[i + 1] + y);
@@ -126,6 +131,10 @@ void ChunkMesh::build(){
 }
 
 void ChunkMesh::render(GLuint &texture){
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    glEnable(GL_ALPHA_TEST);
+
     glEnableVertexAttribArray(0);
 
     glActiveTexture(GL_TEXTURE0);
@@ -143,6 +152,9 @@ void ChunkMesh::render(GLuint &texture){
 
     glDrawArrays(GL_TRIANGLES, 0, vertices_size / 3);
     glDisableVertexAttribArray(0);
+
+    glDisable(GL_BLEND);
+    glDisable(GL_ALPHA_TEST);
 }
 
 ChunkMesh::~ChunkMesh(){

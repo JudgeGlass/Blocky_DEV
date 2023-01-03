@@ -9,12 +9,12 @@
 #include <renderer/texture.hpp>
 
 static const GLfloat cube_vertex_right[] = { // CCW
-    0.5f,-0.5f,0.5f,
-    0.5f,-0.5f,-0.5f,
-    0.5f,0.5f,-0.5f, // RIGHT 
-    0.5f,0.5f,-0.5f,
-    0.5f,0.5f,0.5f,
-    0.5f,-0.5f,0.5f
+    0.5f, 0.5f, 0.5f,
+    0.5f, -0.5f, 0.5f,
+    0.5f, -0.5f, -0.5f,
+    0.5f, -0.5f, -0.5f,
+    0.5f, 0.5f, -0.5f,
+    0.5f, 0.5f, 0.5f
 };
 
 static const GLfloat cube_vertex_left[] = { // CCW
@@ -32,18 +32,16 @@ static const GLfloat cube_vertex_top[] = { // CCW
     -0.5f,0.5f,0.5f,
     -0.5f,0.5f,0.5f,
     0.5f,0.5f,0.5f,
-    0.5f,0.5f,-0.5f,
-    
-    
+    0.5f,0.5f,-0.5f
 };
 
 static const GLfloat cube_vertex_bottom[] = { // CCW
-    0.5f,-0.5f,-0.5f,
-    -0.5f,-0.5f,-0.5f,
-    -0.5f,-0.5f,0.5f, 
-    -0.5f,-0.5f,0.5f,
-    0.5f,-0.5f,0.5f,
-     0.5f,-0.5f,-0.5f
+    -0.5f, -0.5f, 0.5f,
+    -0.5f, -0.5f, -0.5f,
+    0.5f, -0.5f, -0.5f,
+    0.5f, -0.5f, -0.5f,
+    0.5f, -0.5f, 0.5f,
+    -0.5f, -0.5f, 0.5f
 };
 
 static const GLfloat cube_vertex_front[] = { //CCW
@@ -56,12 +54,12 @@ static const GLfloat cube_vertex_front[] = { //CCW
 };
 
 static const GLfloat cube_vertex_back[] = { //CCW
-    -0.5f,0.5f,-0.5f, // BACK
-    -0.5f,-0.5f,-0.5f,
-    0.5f,-0.5f,-0.5f,
-    0.5f,-0.5f,-0.5f,
-    0.5f,0.5f,-0.5f,
-    -0.5f,0.5f,-0.5f
+    0.5f, 0.5f, -0.5f,
+    0.5f, -0.5f, -0.5f,
+    -0.5f, -0.5f, -0.5f,
+    -0.5f, -0.5f, -0.5f,
+    -0.5f, 0.5f, -0.5f,
+    0.5f, 0.5f, -0.5f 
 };
 
 static const GLfloat texture_buffer[] = {
@@ -108,52 +106,6 @@ static const GLfloat texture_buffer[] = {
     0.125f, 0.f
 };
 
-static const GLfloat vertex_buffer[] = { // JUST FOR TESTING!
-    0.5f,0.5f,-0.5f,
-    0.5f,-0.5f,-0.5f,
-    0.5f,-0.5f,0.5f,
-    0.5f,-0.5f,0.5f,
-    0.5f,0.5f,0.5f,
-    0.5f,0.5f,-0.5f,
-
-    -0.5f,0.5f,-0.5f,
-    -0.5f,-0.5f,-0.5f,
-    -0.5f,-0.5f,0.5f,
-    -0.5f,-0.5f,0.5f,
-    -0.5f,0.5f,0.5f,
-    -0.5f,0.5f,-0.5f,
-
-    -0.5f,0.5f,0.5f,
-    -0.5f,0.5f,-0.5f,
-    0.5f,0.5f,-0.5f,
-    0.5f,0.5f,-0.5f,
-    0.5f,0.5f,0.5f,
-    -0.5f,0.5f,0.5f,
-
-
-    -0.5f,-0.5f,0.5f,
-    -0.5f,-0.5f,-0.5f,
-     0.5f,-0.5f,-0.5f,
-     0.5f,-0.5f,-0.5f,
-     0.5f,-0.5f,0.5f,
-    -0.5f,-0.5f,0.5f,
-
-    -0.5f,0.5f,0.5f,
-    -0.5f,-0.5f,0.5f,
-    0.5f,-0.5f,0.5f,
-    0.5f,-0.5f,0.5f,
-    0.5f,0.5f,0.5f,
-    -0.5f,0.5f,0.5f,
-
-    -0.5f,0.5f,-0.5f,
-    -0.5f,-0.5f,-0.5f,
-    0.5f,-0.5f,-0.5f,
-    0.5f,-0.5f,-0.5f,
-    0.5f,0.5f,-0.5f,
-    -0.5f,0.5f,-0.5f    
-};
-
-
 class ChunkMesh{
     public:
         ChunkMesh(const std::vector<Block> &blocks, int cx, int cz);
@@ -163,7 +115,7 @@ class ChunkMesh{
 
         void render(GLuint &texture);
 
-        bool is_transparent(int x, int y, int z);
+        bool is_transparent(int x, int y, int z, unsigned char block_id);
     private:
         int cx;
         int cz;

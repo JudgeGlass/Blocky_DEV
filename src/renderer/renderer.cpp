@@ -34,10 +34,6 @@ void Renderer::init(){
 
     chunk->generate();
     chunk2->generate();
-
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
-    glEnable(GL_ALPHA_TEST);
 }
 
 void Renderer::input(){
@@ -63,12 +59,14 @@ void Renderer::draw(){
     glClearColor(0.4f, 0.7f, 1.0f, 1);
 
     glEnable(GL_CULL_FACE);
+    glFrontFace(GL_CCW);
     glCullFace(GL_BACK);
 
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)game->get_screen_width() / (float)game->get_screen_height(), 0.1f, 100.0f);
     glm::mat4 model = glm::mat4(1.0f);
     glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-    glm::mat4 MVP = projection * view * model;
+    glm::mat4 r = glm::rotate((float)sin(counter) + (float) cos(counter), glm::vec3(0, 1, 0));
+    glm::mat4 MVP = projection * view * model; //* r;
     
     GLuint matrixID = shader->get_uniform_location("MVP");
     glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0]);
