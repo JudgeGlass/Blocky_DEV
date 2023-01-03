@@ -1,8 +1,19 @@
 #ifndef __BLOCK_HPP__
 #define __BLOCK_HPP__
 
+enum ID{
+    AIR,
+    STONE,
+    GRASS,
+    DIRT,
+    
+
+    GLASS = 20
+};
+
 class Block{
     public:
+        Block(){}
         Block(const unsigned char x, const unsigned char y, const unsigned char z, const unsigned char type){
             this->x = x;
             this->y = y;

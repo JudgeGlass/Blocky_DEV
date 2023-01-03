@@ -10,7 +10,7 @@
 
 #include <game/blocky.hpp>
 #include <renderer/shader.hpp>
-#include <world/chunk.hpp> // REMOVE
+#include <world/world.hpp>
 #include <stb_image.h>
 
 class Blocky;
@@ -27,13 +27,13 @@ class Renderer{
         Blocky *game = nullptr;
         Shader *shader = nullptr;
 
-        Chunk *chunk; // REMOVE
-        Chunk *chunk2; // REMOVE
         
+        World *world = nullptr;
+
         GLuint texture;
 
 
-        glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 20.0f);
+        glm::vec3 cameraPos = glm::vec3(0.0f, 60.0f, 20.0f);
         glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
         glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 

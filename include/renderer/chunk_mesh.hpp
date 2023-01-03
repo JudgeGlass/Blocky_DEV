@@ -6,6 +6,7 @@
 #include <GL/glew.h>
 
 #include <world/block.hpp>
+#include <world/world.hpp>
 #include <renderer/texture.hpp>
 
 static const GLfloat cube_vertex_right[] = { // CCW
@@ -106,9 +107,10 @@ static const GLfloat texture_buffer[] = {
     0.125f, 0.f
 };
 
+class World;
 class ChunkMesh{
     public:
-        ChunkMesh(const std::vector<Block> &blocks, int cx, int cz);
+        ChunkMesh(const std::vector<Block> &blocks, int cx, int cz, World *world);
         ~ChunkMesh();
 
         void build();
@@ -126,6 +128,8 @@ class ChunkMesh{
 
         int vertices_size = 0;
         int texture_size = 0;
+
+        World *world = nullptr;
 
         GLuint VAO;
         GLuint VBO;

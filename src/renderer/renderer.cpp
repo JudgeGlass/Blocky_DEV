@@ -5,9 +5,7 @@ Renderer::Renderer(Blocky *game){
 }
 
 void Renderer::init(){
-    chunk = new Chunk(0, 0, 15, 15, 255);
-    chunk2 = new Chunk(1, 0, 15, 15, 255);
-    
+    world = new World(16, 16);
 
     shader = new Shader("vertex.shader", "fragment.shader");
     
@@ -32,12 +30,11 @@ void Renderer::init(){
     glGenerateMipmap(GL_TEXTURE_2D);
     stbi_image_free(data);
 
-    chunk->generate();
-    chunk2->generate();
+    world->generate();
 }
 
 void Renderer::input(){
-    const float cameraSpeed = 0.05f; // adjust accordingly
+    const float cameraSpeed = 0.1f; // adjust accordingly
     if (glfwGetKey(game->get_window(), GLFW_KEY_W) == GLFW_PRESS)
         cameraPos += cameraSpeed * cameraFront;
     if (glfwGetKey(game->get_window(), GLFW_KEY_S) == GLFW_PRESS)
@@ -65,20 +62,20 @@ void Renderer::draw(){
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)game->get_screen_width() / (float)game->get_screen_height(), 0.1f, 100.0f);
     glm::mat4 model = glm::mat4(1.0f);
     glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-    glm::mat4 r = glm::rotate((float)sin(counter) + (float) cos(counter), glm::vec3(0, 1, 0));
-    glm::mat4 MVP = projection * view * model; //* r;
+    glm::mat4 r = glm::rotate((float)-sin(counter) - (float) cos(counter), glm::vec3(0, 1, 0));
+    glm::mat4 MVP = projection * view * model ;//* r;
     
     GLuint matrixID = shader->get_uniform_location("MVP");
     glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0]);
 
 
     glUseProgram(shader->get_program_id());
-    counter += 0.02f;
+    //counter += 0.002f;
 
-    chunk->render(texture);
-    chunk2->render(texture);
+    world->render(texture);
 }
 
 Renderer::~Renderer(){
+    delete world;
     delete shader;
 }

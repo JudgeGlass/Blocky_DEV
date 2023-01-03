@@ -1,23 +1,52 @@
 #include <renderer/chunk_mesh.hpp>
-
-ChunkMesh::ChunkMesh(const std::vector<Block> &blocks, int cx, int cz){
+#include <iostream>
+ChunkMesh::ChunkMesh(const std::vector<Block> &blocks, int cx, int cz, World *world){
     this->blocks = blocks;
     this->cx = cx;
     this->cz = cz;
+    this->world = world;
 }
 
 bool ChunkMesh::is_transparent(int x, int y, int z, unsigned char block_id){
-    if(y < 0 || y > 255 || x < 0 || x > 15 || z < 0 || z > 15) return 1;
+    if(y < 0 || y > 255 ) return 1; // || x < 0 || x > 15 || z < 0 || z > 15
+    Block b;
+    if(x < 0){
+        if(cx - 1 >= 0){
+            b = world->get_chunk(cx - 1, cz)->get_block(15, y, z);
+        }else{
+            return 1;
+        }
+    }else if(x > 15){
+        if(cx + 1 < 16){
+            b = world->get_chunk(cx + 1, cz)->get_block(0, y, z);
+        }else{
+            return 1;
+        }
+    }else if(z < 0){
+        if(cz - 1 >= 0){
+            b = world->get_chunk(cx, cz - 1)->get_block(x, y, 15);
+        }else{
+            return 1;
+        }
+    }else if(z > 15){
+        if(cz + 1 < 16){
+            b = world->get_chunk(cx, cz + 1)->get_block(x, y, 0);
+        }else{
+            return 1;
+        }
+    }else{
+        b = blocks.at(x + y * 16 + z * 16 * 256);
+    }
 
+    
+    
 
-    Block b = blocks.at(x + y * 16 + z * 16 * 256);
-
-    if(b.get_type() == 20 && block_id == 20) return 0; 
+    if(b.get_type() == ID::GLASS && block_id == ID::GLASS) return 0; 
 
     switch (b.get_type())
     {
-    case 0:
-    case 20:
+    case ID::AIR:
+    case ID::GLASS:
         return 1;
     
     default:
@@ -32,8 +61,6 @@ void ChunkMesh::build(){
                 Block b = blocks.at(x + y * 16 + z * 16 * 256);//blocks.at(x + 16 * (y + 16 * z));
                 
                 if(b.get_type() == 0) continue;
-
-                bool isGlass = (b.get_type() == 20);
 
                 if(is_transparent(x - 1, y, z, b.get_type())){
                     for(int i = 0; i < 18; i+=3){
