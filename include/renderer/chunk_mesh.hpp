@@ -109,11 +109,12 @@ static const GLfloat texture_buffer[] = {
 class ChunkMesh{
     public:
         ChunkMesh(const std::vector<Block> &blocks, int cx, int cz);
+        ~ChunkMesh();
 
         void build();
 
         void render(GLuint &texture);
-        
+
         bool is_transparent(int x, int y, int z);
     private:
         int cx;

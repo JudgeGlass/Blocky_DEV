@@ -147,3 +147,9 @@ void ChunkMesh::render(GLuint &texture){
     glDrawArrays(GL_TRIANGLES, 0, vertices_size / 3);
     glDisableVertexAttribArray(0);
 }
+
+ChunkMesh::~ChunkMesh(){
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &TBO);
+    glDeleteVertexArrays(1, &VAO);
+}
