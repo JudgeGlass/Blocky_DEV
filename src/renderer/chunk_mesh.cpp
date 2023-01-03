@@ -7,12 +7,6 @@ ChunkMesh::ChunkMesh(const std::vector<Block> &blocks, int cx, int cz){
     this->cz = cz;
 }
 
-void ChunkMesh::add_texture(){
-    for(int i = 0; i < 12; i++){
-        texture_coords.push_back(texture_buffer[i]);
-    }
-}
-
 bool ChunkMesh::is_transparent(int x, int y, int z){
     if(y < 0 || y > 255 || x < 0 || x > 15 || z < 0 || z > 15) return 1;
 
@@ -29,25 +23,10 @@ bool ChunkMesh::is_transparent(int x, int y, int z){
 }
 
 void ChunkMesh::build(){
-    // for(const auto &block: blocks){
-    //     if(block.get_type() == 0) continue;
-    //     for(int i = 0; i < 108; i+=3){
-    //         vertices.push_back(vertex_buffer[i] + (float) block.get_x() + (cx * 16));
-    //         vertices.push_back(vertex_buffer[i + 1] + (float) block.get_y());
-    //         vertices.push_back(vertex_buffer[i + 2] + (float )block.get_z() + (cz * 16));
-    //     }
-
-    //     for(int i = 0; i < 72; i++){
-    //         texture_coords.push_back(texture_buffer[i]);
-    //     }
-    // }
-
     for(int x = 0; x < 16; x++){
         for(int y = 0; y< 256; y++){
             for(int z = 0; z < 16; z++){
                 Block b = blocks.at(x + 15 * (y + 15 * z));
-                if(y == 1)
-                    std::cout << "X: " << x << "\tY: " << y << "\tZ: " << z << "\tT: " << std::to_string(b.get_type()) << std::endl;
                 
                 if(b.get_type() == 0) continue;
 
@@ -58,7 +37,7 @@ void ChunkMesh::build(){
                         vertices.push_back(cube_vertex_left[i + 2] + z + (cz * 16));
                     }
                     
-                    add_texture();
+                    add_texture_face(b.get_type(), Face::LEFT, texture_coords);
                 }
 
                 if(is_transparent(x + 1, y, z)){
@@ -68,7 +47,7 @@ void ChunkMesh::build(){
                         vertices.push_back(cube_vertex_right[i + 2] + z + (cz * 16));
                     }
                     
-                    add_texture();
+                    add_texture_face(b.get_type(), Face::RIGHT, texture_coords);
                 }
 
                 if(is_transparent(x, y - 1, z)){
@@ -78,7 +57,7 @@ void ChunkMesh::build(){
                         vertices.push_back(cube_vertex_bottom[i + 2] + z + (cz * 16));
                     }
                     
-                    add_texture();
+                    add_texture_face(b.get_type(), Face::BOTTOM, texture_coords);
                 }
 
                 if(is_transparent(x, y + 1, z)){
@@ -88,7 +67,7 @@ void ChunkMesh::build(){
                         vertices.push_back(cube_vertex_top[i + 2] + z + (cz * 16));
                     }
                     
-                    add_texture();
+                    add_texture_face(b.get_type(), Face::TOP, texture_coords);
                 }
 
                 if(is_transparent(x, y, z - 1)){
@@ -98,7 +77,7 @@ void ChunkMesh::build(){
                         vertices.push_back(cube_vertex_back[i + 2] + z + (cz * 16));
                     }
                     
-                    add_texture();
+                    add_texture_face(b.get_type(), Face::BACK, texture_coords);
                 }
 
                 if(is_transparent(x, y, z + 1)){
@@ -108,7 +87,7 @@ void ChunkMesh::build(){
                         vertices.push_back(cube_vertex_front[i + 2] + z + (cz * 16));
                     }
                     
-                    add_texture();
+                    add_texture_face(b.get_type(), Face::FRONT, texture_coords);
                 }
                 
             }

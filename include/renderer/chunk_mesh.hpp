@@ -6,6 +6,7 @@
 #include <GL/glew.h>
 
 #include <world/block.hpp>
+#include <renderer/texture.hpp>
 
 static const GLfloat cube_vertex_right[] = {
     0.5f,0.5f,-0.5f, // RIGHT 
@@ -61,53 +62,6 @@ static const GLfloat cube_vertex_back[] = {
     -0.5f,0.5f,-0.5f
 };
 
-
-
-static const GLfloat vertex_buffer[] = { // JUST FOR TESTING!
-    0.5f,0.5f,-0.5f, // RIGHT 
-    0.5f,-0.5f,-0.5f,
-    0.5f,-0.5f,0.5f,
-    0.5f,-0.5f,0.5f,
-    0.5f,0.5f,0.5f,
-    0.5f,0.5f,-0.5f,
-
-    -0.5f,0.5f,-0.5f, // Left
-    -0.5f,-0.5f,-0.5f,
-    -0.5f,-0.5f,0.5f,
-    -0.5f,-0.5f,0.5f,
-    -0.5f,0.5f,0.5f,
-    -0.5f,0.5f,-0.5f,
-
-    -0.5f,0.5f,0.5f, // TOP
-    -0.5f,0.5f,-0.5f,
-    0.5f,0.5f,-0.5f,
-    0.5f,0.5f,-0.5f,
-    0.5f,0.5f,0.5f,
-    -0.5f,0.5f,0.5f,
-
-
-    -0.5f,-0.5f,0.5f, // BOTTOM
-    -0.5f,-0.5f,-0.5f,
-     0.5f,-0.5f,-0.5f,
-     0.5f,-0.5f,-0.5f,
-     0.5f,-0.5f,0.5f,
-    -0.5f,-0.5f,0.5f,
-
-    -0.5f,0.5f,0.5f, // FRONT
-    -0.5f,-0.5f,0.5f,
-    0.5f,-0.5f,0.5f,
-    0.5f,-0.5f,0.5f,
-    0.5f,0.5f,0.5f,
-    -0.5f,0.5f,0.5f,
-
-    -0.5f,0.5f,-0.5f, // BACK
-    -0.5f,-0.5f,-0.5f,
-    0.5f,-0.5f,-0.5f,
-    0.5f,-0.5f,-0.5f,
-    0.5f,0.5f,-0.5f,
-    -0.5f,0.5f,-0.5f    
-};
-
 static const GLfloat texture_buffer[] = {
     0.125f, 0.0f,   // RIGHT
     0.125f, 0.0625f,
@@ -159,8 +113,7 @@ class ChunkMesh{
         void build();
 
         void render(GLuint &texture);
-
-        void add_texture();
+        
         bool is_transparent(int x, int y, int z);
     private:
         int cx;
