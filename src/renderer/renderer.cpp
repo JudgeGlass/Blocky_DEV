@@ -22,10 +22,17 @@ void Renderer::init(){
         std::cout << "Failed to load texture" << std::endl;
     }
 
+    glActiveTexture(GL_TEXTURE0);
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
+
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST); 
+
+    GLfloat anisotropy;
+    glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &anisotropy);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropy);
+
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
     stbi_image_free(data);
@@ -34,7 +41,7 @@ void Renderer::init(){
 }
 
 void Renderer::input(){
-    const float cameraSpeed = 0.1f; // adjust accordingly
+    const float cameraSpeed = 0.5f; // adjust accordingly
     if (glfwGetKey(game->get_window(), GLFW_KEY_W) == GLFW_PRESS)
         cameraPos += cameraSpeed * cameraFront;
     if (glfwGetKey(game->get_window(), GLFW_KEY_S) == GLFW_PRESS)
@@ -59,7 +66,7 @@ void Renderer::draw(){
     glFrontFace(GL_CCW);
     glCullFace(GL_BACK);
 
-    glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)game->get_screen_width() / (float)game->get_screen_height(), 0.1f, 100.0f);
+    glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)game->get_screen_width() / (float)game->get_screen_height(), 0.1f, 500.0f);
     glm::mat4 model = glm::mat4(1.0f);
     glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
     glm::mat4 r = glm::rotate((float)-sin(counter) - (float) cos(counter), glm::vec3(0, 1, 0));
