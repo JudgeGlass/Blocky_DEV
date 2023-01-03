@@ -34,6 +34,9 @@ void Renderer::init(){
 
     chunk->generate();
     chunk2->generate();
+
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
 }
 
 void Renderer::input(){

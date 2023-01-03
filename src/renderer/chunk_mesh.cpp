@@ -15,6 +15,7 @@ bool ChunkMesh::is_transparent(int x, int y, int z){
     switch (b.get_type())
     {
     case 0:
+    case 20:
         return 1;
     
     default:

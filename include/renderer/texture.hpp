@@ -101,6 +101,45 @@ static const GLfloat texture_uv_stone[] = {
     0.0f, 0.0f
 };
 
+static const GLfloat texture_uv_glass[] = {
+    13.0f/16.0f, 1.0f/16.0f,
+    13.0f/16.0f, 2.0f/16.0f,
+    14.0f/16.0f, 2.0f/16.0f,
+    14.0f/16.0f, 2.0f/16.0f,
+    14.0f/16.0f, 1.0f/16.0f,
+    13.0f/16.0f, 1.0f/16.0f,
+    13.0f/16.0f, 1.0f/16.0f,
+    13.0f/16.0f, 2.0f/16.0f,
+    14.0f/16.0f, 2.0f/16.0f,
+    14.0f/16.0f, 2.0f/16.0f,
+    14.0f/16.0f, 1.0f/16.0f,
+    13.0f/16.0f, 1.0f/16.0f,
+    13.0f/16.0f, 1.0f/16.0f,
+    13.0f/16.0f, 2.0f/16.0f,
+    14.0f/16.0f, 2.0f/16.0f,
+    14.0f/16.0f, 2.0f/16.0f,
+    14.0f/16.0f, 1.0f/16.0f,
+    13.0f/16.0f, 1.0f/16.0f,
+    13.0f/16.0f, 1.0f/16.0f,
+    13.0f/16.0f, 2.0f/16.0f,
+    14.0f/16.0f, 2.0f/16.0f,
+    14.0f/16.0f, 2.0f/16.0f,
+    14.0f/16.0f, 1.0f/16.0f,
+    13.0f/16.0f, 1.0f/16.0f,
+    13.0f/16.0f, 1.0f/16.0f,
+    13.0f/16.0f, 2.0f/16.0f,
+    14.0f/16.0f, 2.0f/16.0f,
+    14.0f/16.0f, 2.0f/16.0f,
+    14.0f/16.0f, 1.0f/16.0f,
+    13.0f/16.0f, 1.0f/16.0f,
+    13.0f/16.0f, 1.0f/16.0f,
+    13.0f/16.0f, 2.0f/16.0f,
+    14.0f/16.0f, 2.0f/16.0f,
+    14.0f/16.0f, 2.0f/16.0f,
+    14.0f/16.0f, 1.0f/16.0f,
+    13.0f/16.0f, 1.0f/16.0f,
+};
+
 static void add_texture_face(const unsigned char &block, Face face, std::vector<GLfloat> &texture_coords){
     if(block == 0) return;
 
@@ -141,7 +180,9 @@ static void add_texture_face(const unsigned char &block, Face face, std::vector<
         case 2:
             texture_coords.push_back(texture_uv_stone[i]);
             break;
-        
+        case 20:
+            texture_coords.push_back(texture_uv_glass[i]);
+            break;
         default:
             return;
         }
