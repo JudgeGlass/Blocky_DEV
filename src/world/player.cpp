@@ -3,7 +3,7 @@
 #include <iostream>
 
 Player::Player(glm::vec3 pos){
-    cameraPos = pos;
+    camera_pos = pos;
     
 }
 
@@ -37,11 +37,11 @@ void Player::render(Shader *shader, Blocky *game){
     direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
     direction.y = sin(glm::radians(pitch));
     direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-    cameraFront = glm::normalize(direction);
+    camera_front = glm::normalize(direction);
 
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)game->get_screen_width() / (float)game->get_screen_height(), 0.1f, 500.0f);
     glm::mat4 model = glm::mat4(1.0f);
-    glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+    glm::mat4 view = glm::lookAt(camera_pos, camera_pos + camera_front, camera_up);
     //glm::mat4 r = glm::rotate((float)-sin(counter) - (float) cos(counter), glm::vec3(0, 1, 0));
     glm::mat4 MVP = projection * view * model ;//* r;
     
@@ -51,19 +51,19 @@ void Player::render(Shader *shader, Blocky *game){
 }
 
 void Player::input(Blocky *game){
-    const float cameraSpeed = 0.5f; // adjust accordingly
+    const float camera_speed = 0.5f; // adjust accordingly
     if (glfwGetKey(game->get_window(), GLFW_KEY_W) == GLFW_PRESS)
-        cameraPos += cameraSpeed * cameraFront;
+        camera_pos += camera_speed * camera_front;
     if (glfwGetKey(game->get_window(), GLFW_KEY_S) == GLFW_PRESS)
-        cameraPos -= cameraSpeed * cameraFront;
+        camera_pos -= camera_speed * camera_front;
     if (glfwGetKey(game->get_window(), GLFW_KEY_A) == GLFW_PRESS)
-        cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        camera_pos -= glm::normalize(glm::cross(camera_front, camera_up)) * camera_speed;
     if (glfwGetKey(game->get_window(), GLFW_KEY_D) == GLFW_PRESS)
-        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        camera_pos += glm::normalize(glm::cross(camera_front, camera_up)) * camera_speed;
     if(glfwGetKey(game->get_window(), GLFW_KEY_SPACE) == GLFW_PRESS)
-        cameraPos += cameraSpeed * cameraUp;
+        camera_pos += camera_speed * camera_up;
     if(glfwGetKey(game->get_window(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-        cameraPos -= cameraSpeed * cameraUp;
+        camera_pos -= camera_speed * camera_up;
 }
 
 void Player::set_mouse_pos(const double x, const double y){

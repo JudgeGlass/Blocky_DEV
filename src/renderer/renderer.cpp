@@ -40,13 +40,8 @@ void Renderer::init(){
     world->generate();
 }
 
-void Renderer::input(){
-    
-}
-
 float counter = 0;
 void Renderer::draw(double &mouse_x, double &mouse_y){
-    input();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0.4f, 0.7f, 1.0f, 1);
 
@@ -54,12 +49,7 @@ void Renderer::draw(double &mouse_x, double &mouse_y){
     glFrontFace(GL_CCW);
     glCullFace(GL_BACK);
 
-    
-
-
     glUseProgram(shader->get_program_id());
-    //counter += 0.002f;
-    std::cout << "X: " << mouse_x << std::endl;
     world->get_player()->set_mouse_pos(mouse_x, mouse_y);
     world->get_player()->render(shader, game);
     world->render(texture);

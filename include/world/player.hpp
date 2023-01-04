@@ -28,9 +28,9 @@ class Player{
         float last_x = 1024/2;
         float last_y = 768/2;
         bool first_mouse = true;
-        glm::vec3 cameraPos = glm::vec3(0.0f, 60.0f, 20.0f);
-        glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-        glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+        glm::vec3 camera_pos = glm::vec3(0.0f, 60.0f, 20.0f);
+        glm::vec3 camera_front = glm::vec3(0.0f, 0.0f, -1.0f);
+        glm::vec3 camera_up = glm::vec3(0.0f, 1.0f, 0.0f);
 };
 
 #endif

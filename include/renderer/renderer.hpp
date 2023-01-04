@@ -23,7 +23,6 @@ class Renderer{
         void init();
         void draw(double &mouse_x, double &mouse_y);
 
-        void input();
     private:
         Blocky *game = nullptr;
         Shader *shader = nullptr;
@@ -32,12 +31,6 @@ class Renderer{
         World *world = nullptr;
 
         GLuint texture;
-
-
-        glm::vec3 cameraPos = glm::vec3(0.0f, 60.0f, 20.0f);
-        glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-        glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-
 };
 
 #endif
