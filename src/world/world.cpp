@@ -3,6 +3,8 @@
 World::World(int width, int depth){
     this->width = width;
     this->depth = depth;
+
+    player = new Player(glm::vec3(0, 65, 20));
 }
 
 void World::generate(){
@@ -39,7 +41,12 @@ std::vector<Chunk*> World::get_chunks(){
     return chunks;
 }
 
+Player* World::get_player(){
+    return player;
+}
+
 World::~World(){
+    delete player;
     for(auto& chunk: chunks){
         delete chunk;
     }

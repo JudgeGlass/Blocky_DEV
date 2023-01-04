@@ -14,6 +14,11 @@ void glfw_keyboard_callback(GLFWwindow *window, int key, int scancode, int actio
 
 }
 
+void Blocky::glfw_mouse_callback(GLFWwindow *window, double xpos, double ypos){
+    mouse_x = xpos;
+    mouse_y = ypos;
+}
+
 Blocky::Blocky(const int width, const int height){
     renderer = new Renderer(this);
 
@@ -52,7 +57,9 @@ void Blocky::init(){
 
     glfwSetWindowSizeCallback(window, glfw_window_size_callback);
     glfwSetKeyCallback(window, glfw_keyboard_callback);
+    glfwSetCursorPosCallback(window, glfw_mouse_callback);
     
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
     renderer->init();
@@ -60,7 +67,7 @@ void Blocky::init(){
 
 void Blocky::loop(){
     while(glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(window) == 0){
-        renderer->draw();
+        renderer->draw(mouse_x, mouse_y);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -71,7 +78,7 @@ void Blocky::loop(){
 
 void Blocky::clean(){
     glfwTerminate();
-    delete renderer;
+    //delete renderer;
 }
 
 GLFWwindow* Blocky::get_window() const {

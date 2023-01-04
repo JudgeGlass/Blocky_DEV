@@ -19,4 +19,5 @@ add_executable(blocky
 
     src/world/chunk.cpp
     src/world/world.cpp
+    src/world/player.cpp
 )

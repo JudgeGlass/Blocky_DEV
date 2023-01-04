@@ -6,16 +6,31 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <game/blocky.hpp>
+#include <renderer/shader.hpp>
+
+class Blocky;
 class Player{
     public:
-        Player();
+        Player(glm::vec3 pos);
 
-        void render();
+        void render(Shader *shader, Blocky *game);
 
-        void input();
+        void input(Blocky *game);
 
+        void set_mouse_pos(const double x, const double y);
         
     private:
+        double mouse_x = 0.0f;
+        double mouse_y = 0.0f;
+        float yaw = -90.0f;
+        float pitch = 0.0;
+        float last_x = 1024/2;
+        float last_y = 768/2;
+        bool first_mouse = true;
+        glm::vec3 cameraPos = glm::vec3(0.0f, 60.0f, 20.0f);
+        glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+        glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 };
 
 #endif

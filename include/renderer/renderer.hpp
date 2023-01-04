@@ -14,13 +14,14 @@
 #include <stb_image.h>
 
 class Blocky;
+class World;
 class Renderer{
     public:
         Renderer(Blocky *game);
         ~Renderer();
 
         void init();
-        void draw();
+        void draw(double &mouse_x, double &mouse_y);
 
         void input();
     private:
