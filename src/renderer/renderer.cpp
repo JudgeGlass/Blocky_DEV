@@ -7,7 +7,7 @@ Renderer::Renderer(Blocky *game){
 void Renderer::init(){
     world = new World(16, 16);
 
-    shader = new Shader("vertex.shader", "fragment.shader");
+    shader = new Shader("vertex.glsl", "fragment.glsl");
     
     shader->load_shader();
 
