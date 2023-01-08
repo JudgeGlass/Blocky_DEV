@@ -7,6 +7,7 @@
 
 #include <world/block.hpp>
 #include <world/world.hpp>
+#include <world/SimplexNoise.h>
 #include <renderer/chunk_mesh.hpp>
 
 class World;

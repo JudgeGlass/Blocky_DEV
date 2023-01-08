@@ -59,7 +59,7 @@ void Player::update(Blocky *game, double delta){
     glm::vec3 last_pos;
 
     click_sleep += delta;
-    std::cout << "DELTA: " << delta << "\tSLEEP: " << click_sleep << std::endl;
+    std::cout << "DELTA: " << delta * 1000 << "\tSLEEP: " << click_sleep << std::endl;
 
     for(Ray ray(glm::vec3(camera_pos.x, camera_pos.y + 0.5f, camera_pos.z), yaw, pitch); ray.get_length() < 6; ray.step(0.05f)){
         float x = ray.get_end().x;
@@ -69,7 +69,7 @@ void Player::update(Blocky *game, double delta){
         int cx = (int) (x / 16);
         int cz = (int) (z / 16);
 
-        if(cx < 0 || cz < 0) break;
+        if(cx < 0 || cz < 0 || cx > 16 || cz > 16) break;
 
         int xx = (int) x % 16;
         int yy = (int) y;

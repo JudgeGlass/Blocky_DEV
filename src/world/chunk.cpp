@@ -21,21 +21,37 @@ void Chunk::generate(){
     std::cout << "Building terrain..." << std::endl;
     std::cout << "CX: " << cx << "\tCY: " << cz << "\tCW: " << cw << "\tCL: " << cl << "\tCH: " << std::to_string(ch) << std::endl; 
     for(int x = 0; x < cw+1; x++){
+        
+        
         for(int y = 0; y < ch+1; y++){
             for(int z = 0; z < cl+1; z++){
-                if(y > 60){
-                    //blocks.push_back(Block(x, y, z, ID::AIR));
-                    blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::AIR);
-                }else if(y == 60){
-                    //blocks.push_back(Block(x, y, z, ID::GRASS));
-                    blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::GRASS);
-                }else if(y > 55){
-                    //blocks.push_back(Block(x, y, z, ID::DIRT));
-                    blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::DIRT);
+                float n = abs(SimplexNoise::noise((float)(x+cx*cw + ((float)rand() / (RAND_MAX))) / 80, (float)(z+cz*cl + ((float)rand() / (RAND_MAX))) / 80) * 12);
+                int l_start = (int)n+ 120;
+                //std::cout << "N: " << n << std::endl;
+
+                if(y <= l_start){
+                    if(y == l_start)
+                        blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::GRASS);
+                    else if(y <= l_start - 1 && y >= l_start - 6)
+                        blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::DIRT);
+                    else
+                        blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::STONE);
                 }else{
-                    //blocks.push_back(Block(x, y, z, ID::STONE));
-                    blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::STONE);
+                    blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::AIR);
                 }
+                // if(y > 60){
+                //     //blocks.push_back(Block(x, y, z, ID::AIR));
+                //     blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::AIR);
+                // }else if(y == 60){
+                //     //blocks.push_back(Block(x, y, z, ID::GRASS));
+                //     blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::GRASS);
+                // }else if(y > 55){
+                //     //blocks.push_back(Block(x, y, z, ID::DIRT));
+                //     blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::DIRT);
+                // }else{
+                //     //blocks.push_back(Block(x, y, z, ID::STONE));
+                //     blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::STONE);
+                // }
             }
         }
     }
