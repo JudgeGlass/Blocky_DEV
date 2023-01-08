@@ -20,7 +20,7 @@ class Player{
         void render(Shader *shader);
         void update(Blocky *game, double delta);
 
-        void input(Blocky *game);
+        void input(Blocky *game, double delta);
 
         void set_mouse_pos(const double x, const double y);
 

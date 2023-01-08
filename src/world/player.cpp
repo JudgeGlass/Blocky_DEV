@@ -22,7 +22,7 @@ void Player::render(Shader *shader){
 }
 
 void Player::update(Blocky *game, double delta){
-    input(game);
+    input(game, delta);
 
     float x_offset = mouse_x - last_x;
     float y_offset = last_y - mouse_y;
@@ -87,7 +87,7 @@ void Player::update(Blocky *game, double delta){
                 }
 
                 if(glfwGetMouseButton(game->get_window(), GLFW_MOUSE_BUTTON_2)){   
-                    world->get_chunk(cx, cz)->set_block((int)last_pos.x % 16, (int)last_pos.y, (int)last_pos.z % 16, ID::STONE);
+                    world->get_chunk(cx, cz)->set_block((int)last_pos.x % 16, (int)last_pos.y, (int)last_pos.z % 16, ID::GLASS);
                     world->get_chunk(cx, cz)->rebuild_mesh();
 
                     click_sleep = 0.0f; 
@@ -101,8 +101,8 @@ void Player::update(Blocky *game, double delta){
     camera_front = glm::normalize(direction);
 }
 
-void Player::input(Blocky *game){
-    const float camera_speed = 0.5f; // adjust accordingly
+void Player::input(Blocky *game, double delta){
+    const float camera_speed = 12.5f * delta; // adjust accordingly
     if (glfwGetKey(game->get_window(), GLFW_KEY_W) == GLFW_PRESS)
         camera_pos += camera_speed * camera_front;
     if (glfwGetKey(game->get_window(), GLFW_KEY_S) == GLFW_PRESS)
