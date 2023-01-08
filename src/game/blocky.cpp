@@ -66,7 +66,11 @@ void Blocky::init(){
 }
 
 void Blocky::loop(){
-    while(glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(window) == 0){
+    while(glfwWindowShouldClose(window) == 0){
+        if(glfwGetKey(window, GLFW_KEY_ESCAPE)){
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        }
+
         renderer->draw();
 
         renderer->update(mouse_x, mouse_y);

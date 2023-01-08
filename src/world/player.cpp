@@ -69,6 +69,8 @@ void Player::update(Blocky *game, double delta){
         int cx = (int) (x / 16);
         int cz = (int) (z / 16);
 
+        if(cx < 0 || cz < 0) break;
+
         int xx = (int) x % 16;
         int yy = (int) y;
         int zz = (int) z % 16;
