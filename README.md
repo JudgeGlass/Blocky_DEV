@@ -13,6 +13,7 @@ Me trying to make a voxel in OpenGL 3.3+
 ## Build
 Install cmake 3.16+ and run
 ```bash
+mkdir build
 cd build
 cmake ..
 ```

@@ -4,6 +4,13 @@ project(blocky)
 
 set(CMAKE_CXX_STANDARD 14)
 
+find_package(GLEW REQUIRED)
+find_library(GLFW_LIB glfw)
+if(NOT GLFW_LIB)
+    message(FATAL_ERROR "glfw library not found")
+endif()
+
+
 LINK_LIBRARIES(GLEW glfw GL GLU)
 
 include_directories("include")
