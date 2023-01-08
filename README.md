@@ -21,3 +21,6 @@ To run, simpily run (in build directory)
 ```bash
 ./blocky
 ```
+
+## Image
+![Demo image of blocky](https://github.com/JudgeGlass/Blocky_DEV/main/resources/demo.png)
