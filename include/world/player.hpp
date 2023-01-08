@@ -8,12 +8,9 @@
 
 #include <game/blocky.hpp>
 #include <renderer/shader.hpp>
-#include <renderer/gl_tools.hpp>
 #include <world/world.hpp>
-#include <world/ray.hpp>
 
 class Blocky;
-class Chunk;
 class Player{
     public:
         Player(glm::vec3 pos, World *world);

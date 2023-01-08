@@ -63,50 +63,6 @@ static const GLfloat cube_vertex_back[] = { //CCW
     0.5f, 0.5f, -0.5f 
 };
 
-// static const GLfloat texture_buffer[] = {
-//     0.125f, 0.0f,   // RIGHT
-//     0.125f, 0.0625f,
-//     0.1875f, 0.0625f,
-//     0.1875f, 0.0625f,
-//     0.1875f, 0.f,
-//     0.125f, 0.f,
-
-//     0.125f, 0.0f, // LEFT
-//     0.125f, 0.0625f,
-//     0.1875f, 0.0625f,
-//     0.1875f, 0.0625f,
-//     0.1875f, 0.f,
-//     0.125f, 0.f,
-
-//     0.0625f, 0.0f, // TOP
-//     0.0625f, 0.0625f,
-//     0.125f, 0.0625,
-//     0.125f, 0.0625f,
-//     0.125f, 0.0f,
-//     0.0625f, 0.0f,
-
-//     3.0f/16.0f, 0.0f, // BOTTOM
-//     3.0f/16.0f, 1.0f/16.0f,
-//     4.0f/16.0f, 1.0f/16.0f,
-//     4.0f/16.0f, 1.0f/16.0f,
-//     4.0f/16.0f, 0.0f,
-//     3.0f/16.0f, 0.0f,
-
-//     0.125f, 0.0f, // FRONT
-//     0.125f, 0.0625f,
-//     0.1875f, 0.0625f,
-//     0.1875f, 0.0625f,
-//     0.1875f, 0.f,
-//     0.125f, 0.f,
-
-//     0.125f, 0.0f,   // BACK
-//     0.125f, 0.0625f,
-//     0.1875f, 0.0625f,
-//     0.1875f, 0.0625f,
-//     0.1875f, 0.f,
-//     0.125f, 0.f
-// };
-
 class World;
 class ChunkMesh{
     public:
@@ -125,9 +81,11 @@ class ChunkMesh{
         unsigned char cw;
         unsigned char ch;
         unsigned char cl;
+        
         bool disable_faces;
-        //std::vector<Block> blocks;
+        
         Block *blocks;
+        
         std::vector<GLfloat> vertices;
         std::vector<GLfloat> texture_coords;
 
