@@ -27,6 +27,7 @@ Install cmake 3.16+ and run
 mkdir build
 cd build
 cmake ..
+make -j16 (replace 16 with amount of cpu cores)
 ```
 
 To run, simpily run (in build directory)
