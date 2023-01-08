@@ -21,6 +21,10 @@ class Block{
             this->type = type;
         }
 
+        void set_type(const unsigned char type){
+            this->type = type;
+        }
+
         unsigned char get_x() const {
             return x;
         }

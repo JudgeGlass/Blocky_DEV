@@ -4,7 +4,7 @@ World::World(int width, int depth){
     this->width = width;
     this->depth = depth;
 
-    player = new Player(glm::vec3(0, 65, 20));
+    player = new Player(glm::vec3(0, 65, 0), this);
 }
 
 void World::generate(){
@@ -17,7 +17,7 @@ void World::generate(){
     }
 
     for(const auto& c: chunks){
-        c->buil_mesh();
+        c->build_mesh();
     }
 }
 

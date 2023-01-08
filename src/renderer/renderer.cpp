@@ -41,7 +41,7 @@ void Renderer::init(){
 }
 
 float counter = 0;
-void Renderer::draw(double &mouse_x, double &mouse_y){
+void Renderer::draw(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0.4f, 0.7f, 1.0f, 1);
 
@@ -50,9 +50,20 @@ void Renderer::draw(double &mouse_x, double &mouse_y){
     glCullFace(GL_BACK);
 
     glUseProgram(shader->get_program_id());
-    world->get_player()->set_mouse_pos(mouse_x, mouse_y);
-    world->get_player()->render(shader, game);
+    
+    world->get_player()->render(shader);
     world->render(texture);
+
+    glUseProgram(0);
+}
+
+void Renderer::update(double &mouse_x, double &mouse_y){
+    world->get_player()->set_mouse_pos(mouse_x, mouse_y);
+    world->get_player()->update(game);
+}
+
+GLuint Renderer::get_texture() {
+    return texture;
 }
 
 Renderer::~Renderer(){

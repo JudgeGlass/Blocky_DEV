@@ -8,13 +8,18 @@
 
 #include <game/blocky.hpp>
 #include <renderer/shader.hpp>
+#include <renderer/gl_tools.hpp>
+#include <world/world.hpp>
+#include <world/ray.hpp>
 
 class Blocky;
+class Chunk;
 class Player{
     public:
-        Player(glm::vec3 pos);
+        Player(glm::vec3 pos, World *world);
 
-        void render(Shader *shader, Blocky *game);
+        void render(Shader *shader);
+        void update(Blocky *game);
 
         void input(Blocky *game);
 
@@ -28,9 +33,11 @@ class Player{
         float last_x = 1024/2;
         float last_y = 768/2;
         bool first_mouse = true;
-        glm::vec3 camera_pos = glm::vec3(0.0f, 60.0f, 20.0f);
+        glm::vec3 camera_pos = glm::vec3(0.0f, 0.0f, 0.0f);
         glm::vec3 camera_front = glm::vec3(0.0f, 0.0f, -1.0f);
         glm::vec3 camera_up = glm::vec3(0.0f, 1.0f, 0.0f);
+
+        World *world = nullptr;       
 };
 
 #endif

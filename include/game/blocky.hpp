@@ -31,6 +31,8 @@ class Blocky{
 
         GLFWwindow* get_window() const;
 
+        Renderer* get_renderer() const;
+
     private: 
         int screen_width;
         int screen_height;

@@ -67,7 +67,9 @@ void Blocky::init(){
 
 void Blocky::loop(){
     while(glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(window) == 0){
-        renderer->draw(mouse_x, mouse_y);
+        renderer->draw();
+
+        renderer->update(mouse_x, mouse_y);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -83,6 +85,10 @@ void Blocky::clean(){
 
 GLFWwindow* Blocky::get_window() const {
     return window;
+}
+
+Renderer* Blocky::get_renderer() const {
+    return renderer;
 }
 
 int Blocky::get_screen_width() const {

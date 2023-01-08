@@ -17,13 +17,19 @@ class Chunk{
         ~Chunk();
 
         void generate();
-        void buil_mesh();
-        void render(GLuint &texture);
+        void build_mesh();
+        void rebuild_mesh();
+        void render(GLuint texture);
+
+        void set_block(unsigned char x, unsigned char y, unsigned char z, unsigned char id);
 
         Block get_block(unsigned char x, unsigned char y, unsigned char z) const;
 
         int get_cx() const;
         int get_cz() const;
+
+        void set_disable_faces(bool v);
+
     private:
         int cx;
         int cz;
@@ -31,9 +37,13 @@ class Chunk{
         unsigned char cl;
         unsigned char ch;
 
+        bool disable_faces = true;
+
         World *world = nullptr;
 
-        std::vector<Block> blocks;
+        //std::vector<Block> blocks;
+        Block blocks[16 * 16 * 256];
+
         ChunkMesh *chunk_mesh = nullptr;
 
 };

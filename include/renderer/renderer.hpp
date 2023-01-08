@@ -21,7 +21,10 @@ class Renderer{
         ~Renderer();
 
         void init();
-        void draw(double &mouse_x, double &mouse_y);
+        void draw();
+        void update(double &mouse_x, double &mouse_y);
+
+        GLuint get_texture();
 
     private:
         Blocky *game = nullptr;
