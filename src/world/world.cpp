@@ -23,7 +23,12 @@ void World::generate(){
 
 void World::render(GLuint &texture){
     for(auto& chunk: chunks){
-        chunk->render(texture);
+        glm::vec2 p_pos = {player->get_pos().x, player->get_pos().z};
+        glm::vec2 c_pos = glm::vec2(chunk->get_cx() * 16, chunk->get_cz() * 16);
+
+        if(glm::distance(p_pos, c_pos) < 128){
+            chunk->render(texture);
+        }
     }
 }
 

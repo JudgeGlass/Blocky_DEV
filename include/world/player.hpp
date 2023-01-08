@@ -23,6 +23,8 @@ class Player{
         void input(Blocky *game);
 
         void set_mouse_pos(const double x, const double y);
+
+        const glm::vec3& get_pos() const;
         
     private:
         double mouse_x = 0.0f;

@@ -117,6 +117,10 @@ void Player::input(Blocky *game){
         camera_pos -= camera_speed * camera_up;
 }
 
+const glm::vec3& Player::get_pos() const {
+    return camera_pos;
+}
+
 void Player::set_mouse_pos(const double x, const double y){
     mouse_x = x;
     mouse_y = y;
