@@ -21,7 +21,7 @@ void Player::render(Shader *shader){
 
 }
 
-void Player::update(Blocky *game){
+void Player::update(Blocky *game, double delta){
     input(game);
 
     float x_offset = mouse_x - last_x;
@@ -54,39 +54,47 @@ void Player::update(Blocky *game){
     glm::vec3 direction;
     direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
     direction.y = sin(glm::radians(pitch));
-    direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-    std::cout << "DIRECTION: " << (yaw) << ", " << (pitch) << std::endl;
-    float x, y, z;
-
-    float l = 5;
-    y = l * sin(glm::radians(pitch));
-    float d = sqrt(l * l - y * y);
-    z = d * sin(glm::radians(yaw));
-    x =  d * cos(glm::radians(yaw));
-    y += (camera_pos.y + 0.6f);
-    z += camera_pos.z;
-    x += camera_pos.x;
+    direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));   
  
-    std::cout << "X: " << (int)x % 16 << "\tY: " << y << "\tZ: " << (int)z % 16 << "\tCX: " << (int)x/16 << "\tCZ: " << (int)z/16<< std::endl;
-    // for(Ray ray({camera_pos.x, camera_pos.y, camera_pos.z}, glm::normalize(direction)); ray.getLength() < 6; ray.step(0.05f, yaw, -pitch)){
-    //     x = (int) ray.getEnd().x;
-    //     y = (int) ray.getEnd().y;
-    //     z = (int) ray.getEnd().z;
+    glm::vec3 last_pos;
 
-    //     //std::cout << "RX: " << x << "\tRY: " << y << "\tRZ: " << z << "\t\tPX: " << (int)camera_pos.x << "\tPY: " << (int)camera_pos.y << "\tPZ: " << (int)camera_pos.z << std::endl;
+    click_sleep += delta;
+    std::cout << "DELTA: " << delta << "\tSLEEP: " << click_sleep << std::endl;
 
+    for(Ray ray(glm::vec3(camera_pos.x, camera_pos.y + 0.5f, camera_pos.z), yaw, pitch); ray.get_length() < 6; ray.step(0.05f)){
+        float x = ray.get_end().x;
+        float y = ray.get_end().y;
+        float z = ray.get_end().z;
+
+        int cx = (int) (x / 16);
+        int cz = (int) (z / 16);
+
+        int xx = (int) x % 16;
+        int yy = (int) y;
+        int zz = (int) z % 16;
+
+        Block b = world->get_chunk(cx, cz)->get_block(xx, yy, zz);
         
+        if(b.get_type() != ID::AIR){
+            if(click_sleep >= 0.2f){
+                if(glfwGetMouseButton(game->get_window(), GLFW_MOUSE_BUTTON_1)){            
+                    world->get_chunk(cx, cz)->set_block(xx, yy, zz, ID::AIR);
+                    world->get_chunk(cx, cz)->rebuild_mesh();
 
-    // }
+                    click_sleep = 0.0f;
+                }
 
-    if(glfwGetKey(game->get_window(), GLFW_KEY_F) == GLFW_PRESS){
-            std::cout << "PRESSED F" << std::endl;
-            
-            world->get_chunk((int)(x / 16), (int)(z / 16))->set_block((int)x % 16, y, (int)z % 16, ID::STONE);
+                if(glfwGetMouseButton(game->get_window(), GLFW_MOUSE_BUTTON_2)){   
+                    world->get_chunk(cx, cz)->set_block((int)last_pos.x % 16, (int)last_pos.y, (int)last_pos.z % 16, ID::STONE);
+                    world->get_chunk(cx, cz)->rebuild_mesh();
 
-            world->get_chunk((int)(x / 16), (int)(z / 16))->rebuild_mesh();
-            //break;
+                    click_sleep = 0.0f; 
+                }
+            }
         }
+
+        last_pos = ray.get_end();
+    }
 
     camera_front = glm::normalize(direction);
 }

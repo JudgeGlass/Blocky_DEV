@@ -31,6 +31,10 @@ class Renderer{
         Shader *shader = nullptr;
 
         
+        double last_time = 0.0f;
+        double current_time = 0.0f;
+        double delta = 0.0f;
+
         World *world = nullptr;
 
         GLuint texture;

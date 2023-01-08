@@ -10,13 +10,15 @@
 #include <renderer/shader.hpp>
 #include <world/world.hpp>
 
+#include <world/ray.hpp>
+
 class Blocky;
 class Player{
     public:
         Player(glm::vec3 pos, World *world);
 
         void render(Shader *shader);
-        void update(Blocky *game);
+        void update(Blocky *game, double delta);
 
         void input(Blocky *game);
 
@@ -25,6 +27,7 @@ class Player{
     private:
         double mouse_x = 0.0f;
         double mouse_y = 0.0f;
+        double click_sleep = 0.0f; // 250ms
         float yaw = -90.0f;
         float pitch = 0.0;
         float last_x = 1024/2;

@@ -28,6 +28,8 @@ void Renderer::init(){
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST); 
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
 
     GLfloat anisotropy;
     glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &anisotropy);
@@ -42,6 +44,10 @@ void Renderer::init(){
 
 float counter = 0;
 void Renderer::draw(){
+    current_time = glfwGetTime();
+    delta = current_time - last_time;
+    last_time = current_time;
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0.4f, 0.7f, 1.0f, 1);
 
@@ -59,7 +65,7 @@ void Renderer::draw(){
 
 void Renderer::update(double &mouse_x, double &mouse_y){
     world->get_player()->set_mouse_pos(mouse_x, mouse_y);
-    world->get_player()->update(game);
+    world->get_player()->update(game, delta);
 }
 
 GLuint Renderer::get_texture() {
