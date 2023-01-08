@@ -23,4 +23,4 @@ To run, simpily run (in build directory)
 ```
 
 ## Image
-![Demo image of blocky](https://github.com/JudgeGlass/Blocky_DEV/main/resources/demo.png)
+![Demo image of blocky](https://github.com/JudgeGlass/Blocky_DEV/blob/main/resources/demo.png?raw=true)
