@@ -81,6 +81,13 @@ void ChunkMesh::build(){
                 if(y == 60){
                     //std::cout << "BLOCK: " << std::to_string(b.get_type()) << std::endl;
                 }
+
+                float lightL = (y + 30) / (float)255 + 0.02f;
+                float lightR = (y + 30) / (float)255 + 0.02f;
+                float lightT = (y + 30) / (float)255 + 0.04f;
+                float lightB = (y + 30) / (float)255 + 0.01f;
+                float lightF = (y + 30) / (float)255 + 0.025f;
+                float lightRR = (y + 30) / (float)255 + 0.025f;
                 
                 if(b.get_type() == 0) continue;
 
@@ -90,7 +97,7 @@ void ChunkMesh::build(){
                             vertices.push_back(cube_vertex_left[i] + x + (cx * 16));
                             vertices.push_back(cube_vertex_left[i + 1] + y);
                             vertices.push_back(cube_vertex_left[i + 2] + z + (cz * 16));
-                            light_levels.push_back(0.8f);
+                            light_levels.push_back(lightL);
                         }
                         
                         add_texture_face(b.get_type(), Face::LEFT, texture_coords);
@@ -111,7 +118,7 @@ void ChunkMesh::build(){
                             vertices.push_back(cube_vertex_right[i] + x + (cx * 16));
                             vertices.push_back(cube_vertex_right[i + 1] + y);
                             vertices.push_back(cube_vertex_right[i + 2] + z + (cz * 16));
-                            light_levels.push_back(0.8f);
+                            light_levels.push_back(lightR);
                         }
                         
                         add_texture_face(b.get_type(), Face::RIGHT, texture_coords);
@@ -132,7 +139,7 @@ void ChunkMesh::build(){
                             vertices.push_back(cube_vertex_bottom[i] + x + (cx * 16));
                             vertices.push_back(cube_vertex_bottom[i + 1] + y);
                             vertices.push_back(cube_vertex_bottom[i + 2] + z + (cz * 16));
-                            light_levels.push_back(0.6f);
+                            light_levels.push_back(lightB);
                         }
                         
                         add_texture_face(b.get_type(), Face::BOTTOM, texture_coords);
@@ -153,7 +160,7 @@ void ChunkMesh::build(){
                             vertices.push_back(cube_vertex_top[i] + x + (cx * 16));
                             vertices.push_back(cube_vertex_top[i + 1] + y);
                             vertices.push_back(cube_vertex_top[i + 2] + z + (cz * 16));
-                            light_levels.push_back(0.6f);
+                            light_levels.push_back(lightT);
                         }
                         
                         add_texture_face(b.get_type(), Face::TOP, texture_coords);
@@ -174,7 +181,7 @@ void ChunkMesh::build(){
                             vertices.push_back(cube_vertex_back[i] + x + (cx * 16));
                             vertices.push_back(cube_vertex_back[i + 1] + y);
                             vertices.push_back(cube_vertex_back[i + 2] + z + (cz * 16));
-                            light_levels.push_back(1.0f);
+                            light_levels.push_back(lightRR);
                         }
                         
                         add_texture_face(b.get_type(), Face::BACK, texture_coords);
@@ -195,7 +202,7 @@ void ChunkMesh::build(){
                             vertices.push_back(cube_vertex_front[i] + x + (cx * 16));
                             vertices.push_back(cube_vertex_front[i + 1] + y);
                             vertices.push_back(cube_vertex_front[i + 2] + z + (cz * 16));
-                            light_levels.push_back(1.0f);
+                            light_levels.push_back(lightF);
                         }
                         
                         add_texture_face(b.get_type(), Face::FRONT, texture_coords);
