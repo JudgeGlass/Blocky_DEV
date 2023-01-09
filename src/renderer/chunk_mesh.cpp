@@ -77,17 +77,15 @@ void ChunkMesh::build(){
             for(int z = 0; z < cl + 1; z++){
                 Block b = blocks[x + y * (cl + 1) + z * (cw + 1) * (ch + 1)]; //blocks.at(x + 16 * (y + 16 * z));
 
+                float light = b.get_light() / 15.0f;
+                
 
-                if(y == 60){
-                    //std::cout << "BLOCK: " << std::to_string(b.get_type()) << std::endl;
-                }
-
-                float lightL = (y + 30) / (float)255 + 0.02f;
-                float lightR = (y + 30) / (float)255 + 0.02f;
-                float lightT = (y + 30) / (float)255 + 0.04f;
-                float lightB = (y + 30) / (float)255 + 0.01f;
-                float lightF = (y + 30) / (float)255 + 0.025f;
-                float lightRR = (y + 30) / (float)255 + 0.025f;
+                float lightL = light + 0.02f;
+                float lightR = light + 0.02f;
+                float lightT = light + 0.04f;
+                float lightB = light + 0.01f;
+                float lightF = light + 0.025f;
+                float lightRR = light + 0.025f;
                 
                 if(b.get_type() == 0) continue;
 
@@ -288,7 +286,17 @@ void ChunkMesh::build(){
 }
 
 void ChunkMesh::rebuild(Block *blocks){
-    this->blocks = blocks;   
+    this->blocks = blocks;
+
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &TBO);
+    glDeleteBuffers(1, &LBO);  
+
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &TBO);
+    glGenBuffers(1, &LBO);   
 
     build();
 }
@@ -320,9 +328,6 @@ void ChunkMesh::render(GLuint texture){
     glEnableVertexAttribArray(3);
     glBindBuffer(GL_ARRAY_BUFFER, LBO);
     glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, 0, (void *) 0);
-
-    std::cout << "V: " << vertices_size << "\tT: " << texture_size << "\tL: " << light_level_size << std::endl;
-
 
     glDrawArrays(GL_TRIANGLES, 0, vertices_size / 3);
     glDisableVertexAttribArray(0);

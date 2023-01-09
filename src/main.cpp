@@ -7,7 +7,7 @@
 int main(){
     std::cout << "Starting Blocky..." << std::endl;
 
-    Blocky game(1024, 768);
+    Blocky game(1600, 480*2);
 
     game.init();
     game.loop();

@@ -17,6 +17,7 @@ void World::generate(){
     }
 
     for(const auto& c: chunks){
+        c->build_lighting();
         c->build_mesh();
     }
 }

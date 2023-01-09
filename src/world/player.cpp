@@ -76,19 +76,25 @@ void Player::update(Blocky *game, double delta){
         int zz = (int) z % 16;
 
         Block b = world->get_chunk(cx, cz)->get_block(xx, yy, zz);
+        std::cout << "BLOCK: " << std::to_string(b.get_type()) << "\tL: " << b.get_light() << "\tX: " << xx << "\tZ: " << zz << std::endl;
         
         if(b.get_type() != ID::AIR){
             if(click_sleep >= 0.2f){
-                if(glfwGetMouseButton(game->get_window(), GLFW_MOUSE_BUTTON_1)){            
-                    world->get_chunk(cx, cz)->set_block(xx, yy, zz, ID::AIR);
+                if(glfwGetMouseButton(game->get_window(), GLFW_MOUSE_BUTTON_1)){   
+                    Block b(xx, yy, zz, ID::AIR, 1.0f, false);      
+                    world->get_chunk(cx, cz)->set_block(b);
+                    world->get_chunk(cx, cz)->build_lighting();
                     world->get_chunk(cx, cz)->rebuild_mesh();
 
                     click_sleep = 0.0f;
                 }
 
-                if(glfwGetMouseButton(game->get_window(), GLFW_MOUSE_BUTTON_2)){   
-                    world->get_chunk(cx, cz)->set_block((int)last_pos.x % 16, (int)last_pos.y, (int)last_pos.z % 16, ID::GLASS);
+                if(glfwGetMouseButton(game->get_window(), GLFW_MOUSE_BUTTON_2)){  
+                    Block b((int)last_pos.x % 16, (int)last_pos.y, (int)last_pos.z % 16, ID::GLASS, 15.0f, false); 
+                    world->get_chunk(cx, cz)->set_block(b);
+                    world->get_chunk(cx, cz)->build_lighting();
                     world->get_chunk(cx, cz)->rebuild_mesh();
+                    
 
                     click_sleep = 0.0f; 
                 }

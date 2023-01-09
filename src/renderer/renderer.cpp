@@ -40,6 +40,7 @@ void Renderer::init(){
     stbi_image_free(data);
 
     world->generate();
+    glfwSetInputMode(game->get_window(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 float counter = 0;

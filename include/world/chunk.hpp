@@ -20,12 +20,13 @@ class Chunk{
         void generate();
         void build_mesh();
         void rebuild_mesh();
+        void build_lighting();
         void render(GLuint texture);
         void render_transparent(GLuint texture);
 
-        void set_block(unsigned char x, unsigned char y, unsigned char z, unsigned char id);
+        void set_block(Block b);
 
-        Block get_block(unsigned char x, unsigned char y, unsigned char z) const;
+        const Block& get_block(unsigned char x, unsigned char y, unsigned char z);
 
         int get_cx() const;
         int get_cz() const;

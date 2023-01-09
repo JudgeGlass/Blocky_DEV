@@ -59,7 +59,6 @@ void Blocky::init(){
     glfwSetKeyCallback(window, glfw_keyboard_callback);
     glfwSetCursorPosCallback(window, glfw_mouse_callback);
     
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
     renderer->init();
