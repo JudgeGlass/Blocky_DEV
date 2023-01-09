@@ -21,6 +21,7 @@ class Chunk{
         void build_mesh();
         void rebuild_mesh();
         void render(GLuint texture);
+        void render_transparent(GLuint texture);
 
         void set_block(unsigned char x, unsigned char y, unsigned char z, unsigned char id);
 

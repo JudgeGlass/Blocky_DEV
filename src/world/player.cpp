@@ -87,7 +87,7 @@ void Player::update(Blocky *game, double delta){
                 }
 
                 if(glfwGetMouseButton(game->get_window(), GLFW_MOUSE_BUTTON_2)){   
-                    world->get_chunk(cx, cz)->set_block((int)last_pos.x % 16, (int)last_pos.y, (int)last_pos.z % 16, ID::DIRT);
+                    world->get_chunk(cx, cz)->set_block((int)last_pos.x % 16, (int)last_pos.y, (int)last_pos.z % 16, ID::GLASS);
                     world->get_chunk(cx, cz)->rebuild_mesh();
 
                     click_sleep = 0.0f; 

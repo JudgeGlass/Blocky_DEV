@@ -73,6 +73,7 @@ class ChunkMesh{
         void rebuild(Block *blocks);
 
         void render(GLuint texture);
+        void render_transparent(GLuint texture);
 
         bool is_transparent(int x, int y, int z, unsigned char block_id);
     private:
@@ -89,17 +90,33 @@ class ChunkMesh{
         std::vector<GLfloat> vertices;
         std::vector<GLfloat> texture_coords;
 
+        std::vector<GLfloat> tvertices;
+        std::vector<GLfloat> ttexture_coords;
+
+        std::vector<GLfloat> light_levels;
+
         int vertices_size = 0;
         int texture_size = 0;
+        int tvertices_size = 0;
+        int ttexture_size = 0;
+        int light_level_size = 0;
 
         World *world = nullptr;
 
         GLuint VAO;
         GLuint VBO;
+        GLuint TVBO;
+        GLuint TTBO;
         GLuint TBO;
+        GLuint LBO;
 
         GLfloat *vBuff = nullptr;
         GLfloat *tBuff = nullptr;
+
+        GLfloat *tvBuff = nullptr;
+        GLfloat *ttBuff = nullptr;
+
+        GLfloat *lBuff = nullptr;
 };
 
 #endif

@@ -97,3 +97,7 @@ void Chunk::set_block(unsigned char x, unsigned char y, unsigned char z, unsigne
 void Chunk::render(GLuint texture){
     chunk_mesh->render(texture);
 }
+
+void Chunk::render_transparent(GLuint texture){
+    chunk_mesh->render_transparent(texture);
+}

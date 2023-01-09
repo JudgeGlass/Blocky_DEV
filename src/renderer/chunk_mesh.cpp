@@ -15,6 +15,11 @@ ChunkMesh::ChunkMesh(Block *blocks, int cx, int cz, const unsigned char cw, cons
 
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &TBO);
+
+    glGenBuffers(1, &TVBO); // For transparent objects
+    glGenBuffers(1, &TTBO);
+
+    glGenBuffers(1, &LBO);
 }
 
 bool ChunkMesh::is_transparent(int x, int y, int z, unsigned char block_id){
@@ -80,63 +85,129 @@ void ChunkMesh::build(){
                 if(b.get_type() == 0) continue;
 
                 if(is_transparent(x - 1, y, z, b.get_type())){
-                    for(int i = 0; i < 18; i+=3){
-                        vertices.push_back(cube_vertex_left[i] + x + (cx * 16));
-                        vertices.push_back(cube_vertex_left[i + 1] + y);
-                        vertices.push_back(cube_vertex_left[i + 2] + z + (cz * 16));
+                    if(b.get_type() != ID::AIR){
+                        for(int i = 0; i < 18; i+=3){
+                            vertices.push_back(cube_vertex_left[i] + x + (cx * 16));
+                            vertices.push_back(cube_vertex_left[i + 1] + y);
+                            vertices.push_back(cube_vertex_left[i + 2] + z + (cz * 16));
+                            light_levels.push_back(0.8f);
+                        }
+                        
+                        add_texture_face(b.get_type(), Face::LEFT, texture_coords);
+                    }else{
+                        for(int i = 0; i < 18; i+=3){
+                            tvertices.push_back(cube_vertex_left[i] + x + (cx * 16));
+                            tvertices.push_back(cube_vertex_left[i + 1] + y);
+                            tvertices.push_back(cube_vertex_left[i + 2] + z + (cz * 16));
+                        }
+                        
+                        add_texture_face(b.get_type(), Face::LEFT, ttexture_coords);
                     }
-                    
-                    add_texture_face(b.get_type(), Face::LEFT, texture_coords);
                 }
 
                 if(is_transparent(x + 1, y, z, b.get_type())){
-                    for(int i = 0; i < 18; i+=3){
-                        vertices.push_back(cube_vertex_right[i] + x + (cx * 16));
-                        vertices.push_back(cube_vertex_right[i + 1] + y);
-                        vertices.push_back(cube_vertex_right[i + 2] + z + (cz * 16));
+                    if(b.get_type() != ID::AIR){
+                        for(int i = 0; i < 18; i+=3){
+                            vertices.push_back(cube_vertex_right[i] + x + (cx * 16));
+                            vertices.push_back(cube_vertex_right[i + 1] + y);
+                            vertices.push_back(cube_vertex_right[i + 2] + z + (cz * 16));
+                            light_levels.push_back(0.8f);
+                        }
+                        
+                        add_texture_face(b.get_type(), Face::RIGHT, texture_coords);
+                    }else {
+                        for(int i = 0; i < 18; i+=3){
+                            tvertices.push_back(cube_vertex_right[i] + x + (cx * 16));
+                            tvertices.push_back(cube_vertex_right[i + 1] + y);
+                            tvertices.push_back(cube_vertex_right[i + 2] + z + (cz * 16));
+                        }
+                        
+                        add_texture_face(b.get_type(), Face::RIGHT, ttexture_coords);
                     }
-                    
-                    add_texture_face(b.get_type(), Face::RIGHT, texture_coords);
                 }
 
                 if(is_transparent(x, y - 1, z, b.get_type())){
-                    for(int i = 0; i < 18; i+=3){
-                        vertices.push_back(cube_vertex_bottom[i] + x + (cx * 16));
-                        vertices.push_back(cube_vertex_bottom[i + 1] + y);
-                        vertices.push_back(cube_vertex_bottom[i + 2] + z + (cz * 16));
+                    if(b.get_type() != ID::AIR){
+                        for(int i = 0; i < 18; i+=3){
+                            vertices.push_back(cube_vertex_bottom[i] + x + (cx * 16));
+                            vertices.push_back(cube_vertex_bottom[i + 1] + y);
+                            vertices.push_back(cube_vertex_bottom[i + 2] + z + (cz * 16));
+                            light_levels.push_back(0.6f);
+                        }
+                        
+                        add_texture_face(b.get_type(), Face::BOTTOM, texture_coords);
+                    }else{
+                        for(int i = 0; i < 18; i+=3){
+                            tvertices.push_back(cube_vertex_bottom[i] + x + (cx * 16));
+                            tvertices.push_back(cube_vertex_bottom[i + 1] + y);
+                            tvertices.push_back(cube_vertex_bottom[i + 2] + z + (cz * 16));
+                        }
+                        
+                        add_texture_face(b.get_type(), Face::BOTTOM, ttexture_coords);
                     }
-                    
-                    add_texture_face(b.get_type(), Face::BOTTOM, texture_coords);
                 }
 
                 if(is_transparent(x, y + 1, z, b.get_type())){
-                    for(int i = 0; i < 18; i+=3){
-                        vertices.push_back(cube_vertex_top[i] + x + (cx * 16));
-                        vertices.push_back(cube_vertex_top[i + 1] + y);
-                        vertices.push_back(cube_vertex_top[i + 2] + z + (cz * 16));
+                    if(b.get_type() != ID::AIR){
+                        for(int i = 0; i < 18; i+=3){
+                            vertices.push_back(cube_vertex_top[i] + x + (cx * 16));
+                            vertices.push_back(cube_vertex_top[i + 1] + y);
+                            vertices.push_back(cube_vertex_top[i + 2] + z + (cz * 16));
+                            light_levels.push_back(0.6f);
+                        }
+                        
+                        add_texture_face(b.get_type(), Face::TOP, texture_coords);
+                    }else{
+                        for(int i = 0; i < 18; i+=3){
+                            tvertices.push_back(cube_vertex_top[i] + x + (cx * 16));
+                            tvertices.push_back(cube_vertex_top[i + 1] + y);
+                            tvertices.push_back(cube_vertex_top[i + 2] + z + (cz * 16));
+                        }
+                        
+                        add_texture_face(b.get_type(), Face::TOP, ttexture_coords);
                     }
-                    
-                    add_texture_face(b.get_type(), Face::TOP, texture_coords);
                 }
 
                 if(is_transparent(x, y, z - 1, b.get_type())){
-                    for(int i = 0; i < 18; i+=3){
-                        vertices.push_back(cube_vertex_back[i] + x + (cx * 16));
-                        vertices.push_back(cube_vertex_back[i + 1] + y);
-                        vertices.push_back(cube_vertex_back[i + 2] + z + (cz * 16));
-                    }
-                    
-                    add_texture_face(b.get_type(), Face::BACK, texture_coords);
+                    if(b.get_type() != ID::AIR){
+                        for(int i = 0; i < 18; i+=3){
+                            vertices.push_back(cube_vertex_back[i] + x + (cx * 16));
+                            vertices.push_back(cube_vertex_back[i + 1] + y);
+                            vertices.push_back(cube_vertex_back[i + 2] + z + (cz * 16));
+                            light_levels.push_back(1.0f);
+                        }
+                        
+                        add_texture_face(b.get_type(), Face::BACK, texture_coords);
+                    }else{
+                        for(int i = 0; i < 18; i+=3){
+                            tvertices.push_back(cube_vertex_back[i] + x + (cx * 16));
+                            tvertices.push_back(cube_vertex_back[i + 1] + y);
+                            tvertices.push_back(cube_vertex_back[i + 2] + z + (cz * 16));
+                        }
+                        
+                        add_texture_face(b.get_type(), Face::BACK, ttexture_coords);
+                    }                    
                 }
 
                 if(is_transparent(x, y, z + 1, b.get_type())){
-                    for(int i = 0; i < 18; i+=3){
-                        vertices.push_back(cube_vertex_front[i] + x + (cx * 16));
-                        vertices.push_back(cube_vertex_front[i + 1] + y);
-                        vertices.push_back(cube_vertex_front[i + 2] + z + (cz * 16));
+                    if(b.get_type() != ID::AIR){
+                        for(int i = 0; i < 18; i+=3){
+                            vertices.push_back(cube_vertex_front[i] + x + (cx * 16));
+                            vertices.push_back(cube_vertex_front[i + 1] + y);
+                            vertices.push_back(cube_vertex_front[i + 2] + z + (cz * 16));
+                            light_levels.push_back(1.0f);
+                        }
+                        
+                        add_texture_face(b.get_type(), Face::FRONT, texture_coords);
+                    }else{
+                        for(int i = 0; i < 18; i+=3){
+                            tvertices.push_back(cube_vertex_front[i] + x + (cx * 16));
+                            tvertices.push_back(cube_vertex_front[i + 1] + y);
+                            tvertices.push_back(cube_vertex_front[i + 2] + z + (cz * 16));
+                        }
+                        
+                        add_texture_face(b.get_type(), Face::FRONT, ttexture_coords);
                     }
-                    
-                    add_texture_face(b.get_type(), Face::FRONT, texture_coords);
                 }
                 
             }
@@ -145,9 +216,15 @@ void ChunkMesh::build(){
 
     vertices_size = vertices.size();
     texture_size = texture_coords.size();
+    tvertices_size = tvertices.size();
+    ttexture_size = ttexture_coords.size();
+    light_level_size = light_levels.size();
 
     vBuff = new GLfloat[vertices_size];
     tBuff = new GLfloat[texture_size];
+    tvBuff = new GLfloat[vertices_size];
+    ttBuff = new GLfloat[texture_size];
+    lBuff = new GLfloat[light_level_size];
     for(int i = 0; i < vertices_size; i++){
         vBuff[i] = vertices.at(i);
     }
@@ -155,25 +232,51 @@ void ChunkMesh::build(){
     for(int i = 0; i < texture_size; i++){
         tBuff[i] = texture_coords.at(i);
     }
+
+    for(int i = 0; i < tvertices_size; i++){
+        tvBuff[i] = tvertices.at(i);
+    }
+
+    for(int i = 0; i < ttexture_size; i++){
+        ttBuff[i] = ttexture_coords.at(i);
+    }
+
+    for(int i = 0; i < light_level_size; i++){
+        lBuff[i] = light_levels.at(i);
+    }
+
     vertices.clear();
     texture_coords.clear();
+    tvertices.clear();
+    ttexture_coords.clear();
+    light_levels.clear();
 
-    // glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
 
-    // glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices_size, vBuff, GL_STATIC_DRAW);
 
-    //glGenBuffers(1, &TBO);
     glBindBuffer(GL_ARRAY_BUFFER, TBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * texture_size, tBuff, GL_STATIC_DRAW);
 
-    //glBindVertexArray(0);
-    //glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, LBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * light_level_size, lBuff, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, TVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * tvertices_size, tvBuff, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, TTBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * ttexture_size, ttBuff, GL_STATIC_DRAW);
+
+
+    glBindVertexArray(0);
+    
 
     delete[] vBuff;
     delete[] tBuff;
+    delete[] tvBuff;
+    delete[] ttBuff;
+    delete[] lBuff;
 
 }
 
@@ -191,6 +294,7 @@ void ChunkMesh::render(GLuint texture){
     glEnable(GL_ALPHA_TEST);
 
     glEnableVertexAttribArray(0);
+    
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -205,8 +309,48 @@ void ChunkMesh::render(GLuint texture){
     glBindBuffer(GL_ARRAY_BUFFER, TBO);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void *) 0);
 
+    // Light data
+    glEnableVertexAttribArray(3);
+    glBindBuffer(GL_ARRAY_BUFFER, LBO);
+    glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, 0, (void *) 0);
+
+    std::cout << "V: " << vertices_size << "\tT: " << texture_size << "\tL: " << light_level_size << std::endl;
+
 
     glDrawArrays(GL_TRIANGLES, 0, vertices_size / 3);
+    glDisableVertexAttribArray(0);
+
+    glDisable(GL_BLEND);
+    glDisable(GL_ALPHA_TEST);
+
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void ChunkMesh::render_transparent(GLuint texture){
+    glBindVertexArray(VAO);
+
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    glEnable(GL_ALPHA_TEST);
+
+    glEnableVertexAttribArray(0);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glUniform1i(texture, 0);
+
+    // Vertex data
+    glBindBuffer(GL_ARRAY_BUFFER, TVBO);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void *) 0);
+
+    // Texture data
+    glEnableVertexAttribArray(2);
+    glBindBuffer(GL_ARRAY_BUFFER, TTBO);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void *) 0);
+
+
+    glDrawArrays(GL_TRIANGLES, 0, tvertices_size / 3);
     glDisableVertexAttribArray(0);
 
     glDisable(GL_BLEND);

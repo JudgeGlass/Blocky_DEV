@@ -59,6 +59,7 @@ void Renderer::draw(){
     
     world->get_player()->render(shader);
     world->render(texture);
+    world->rander_transparent(texture);
 
     glUseProgram(0);
 }

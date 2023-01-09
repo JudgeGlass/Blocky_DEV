@@ -5,7 +5,7 @@
 #include <game/blocky.hpp>
 
 int main(){
-    std::cout << "Staring Blocky..." << std::endl;
+    std::cout << "Starting Blocky..." << std::endl;
 
     Blocky game(1024, 768);
 
