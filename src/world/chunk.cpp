@@ -27,6 +27,12 @@ void Chunk::generate(){
                 int l_start = (int)n+ 120;
                 //std::cout << "N: " << n << std::endl;
 
+
+                if(y < 20 && y > 15 && x < 11 && x > 8){
+                    blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::AIR, 1.0f, false);
+                    continue;
+                }
+
                 if(y <= l_start){
                     if(y == l_start)
                         blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::GRASS, 1.0f, false);
@@ -68,57 +74,116 @@ void Chunk::rebuild_mesh(){
 }
 
 void Chunk::build_lighting(){
-    for(int x = 0; x < cw+1; x++){
-        for(int y = 255; y > -1; y--){
-            for(int z = 0; z < cl+1; z++){
-                Block b = get_block(x, y, z);
 
-                if(b.get_is_sky()){
-                    b.set_light_level(15);
-                    continue;
-                }
+    for(auto &b: blocks){
+        if(b.get_type() == ID::AIR && !b.get_is_sky()) {
+            b.set_light_level(0.0f);
+        }
+    }
+
+    for(int y = 255; y > -1; y--){
+        for(int z = 0; z < cl+1; z++){
+            for(int x = 0; x < cw+1; x++){
+                Block b = get_block(x, y, z);
+                
+
+                if(b.get_type() == ID::AIR && b.get_is_sky()) continue;
+
+                
 
                 float left = 0.0f, right = 0.0f, front = 0.0f, back = 0.0f, top = 0.0f, bottom = 0.0f;
                 if(x - 1 >= 0){
-                    left = get_block(x - 1, y, z).get_light();
+                    Block b_left = get_block(x - 1, y, z);
+                    if(b_left.get_type() == ID::AIR){
+                        left = b_left.get_light();
+                    }else{
+                        left = 0;
+                    }
                 }else{
                     if(cx - 1 < 0) left = 0;
-                    else
-                        left = world->get_chunk(cx - 1, cz)->get_block(15, y, z).get_light();
+                    else{
+                        Block b_left = world->get_chunk(cx - 1, cz)->get_block(15, y, z);
+                        if(b_left.get_type() == ID::AIR){
+                            left = b_left.get_light();
+                        }else{
+                            left = 0;
+                        }
+                    }
                 }
 
                 if(x + 1 < 16){
-                    right = get_block(x + 1, y, z).get_light();
+                    Block b_right = get_block(x + 1, y, z);
+                    if(b_right.get_type() == ID::AIR){
+                        right = b_right.get_light();
+                    }
                 }else{
                     if(cx + 1 > 15) right = 0;
-                    else
-                        right = world->get_chunk(cx + 1, cz)->get_block(0, y, z).get_light();
+                    else{
+                        Block b_right = world->get_chunk(cx + 1, cz)->get_block(0, y, z);
+                        if(b_right.get_type() == ID::AIR){
+                            right = b_right.get_light();
+                        }else{
+                            right = 0;
+                        }
+                    }
                 }
 
                 if(z - 1 >= 0){
-                    front = get_block(x, y, z - 1).get_light();
+                    Block b_front = get_block(x, y, z - 1);
+                    if(b_front.get_type() == ID::AIR){
+                        front = b_front.get_light();
+                    }else{
+                        front = 0;
+                    }
                 }else{
                     if(cz - 1 < 0) front = 0;
-                    else
-                        front = world->get_chunk(cx, cz - 1)->get_block(x, y, 15).get_light();
+                    else{
+                        Block b_front = world->get_chunk(cx, cz - 1)->get_block(x, y, 15);
+                        if(b_front.get_type() == ID::AIR){
+                            front = b_front.get_light();
+                        }else{
+                            front = 0;
+                        }
+                    }
                 }
 
                 if(z + 1 < 16){
-                    back = get_block(x, y, z + 1).get_light();
+                    Block b_back = get_block(x, y, z + 1);
+                    if(b_back.get_type() == ID::AIR){
+                        back = b_back.get_light();
+                    }else{
+                        back = 0;
+                    }
                 }else{
                     if(cz + 1 > 15) back = 0;
-                    else
-                        back = world->get_chunk(cx, cz + 1)->get_block(x, y, 0).get_light();
+                    else{
+                        Block b_back = world->get_chunk(cx, cz + 1)->get_block(x, y, 0);
+                        if(b_back.get_type() == ID::AIR){
+                            back = b_back.get_light();
+                        }else{
+                            back = 0;
+                        }
+                    }
                 }
 
                 if(y - 1 >= 0){
-                    bottom = get_block(x, y - 1, z).get_light();
+                    Block b_bottom = get_block(x, y - 1, z);
+                    if(b_bottom.get_type() == ID::AIR){
+                        bottom = b_bottom.get_light();
+                    }else{
+                        bottom = 0;
+                    }
                 }else{
                     bottom = 0;
                 }
 
                 if(y + 1 < 256){
-                    top = get_block(x, y + 1, z).get_light();
+                    Block b_top = get_block(x, y + 1, z);
+                    if(b_top.get_type() == ID::AIR){
+                        top = b_top.get_light();
+                    }else{
+                        top = 0;
+                    }
                 }else{
                     top = 0;
                 }
@@ -133,15 +198,18 @@ void Chunk::build_lighting(){
 
 
                 float max = levels[0];
+                bool has_zero = false;
                 for(int i = 0; i < 6; i++){
+                    if(levels[i] == 0.0f) has_zero = true;
                     if(levels[i] > max) max = levels[i];
                 }
 
-                if(--max <= 0.0) max = 1.0f;
-                
+                if(has_zero)
+                    if(max - 1 <= 0.0) max = 1.0f;
+                //std::cout << "MAX: " << max << std::endl;
                 
 
-                b.set_light_level(max);
+                b.set_light_level(max - 1);
                 blocks[x + y * 16 + z * 16 * 256] = b;
             }
         }

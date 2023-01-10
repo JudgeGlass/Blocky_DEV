@@ -72,22 +72,74 @@ bool ChunkMesh::is_transparent(int x, int y, int z, unsigned char block_id){
 }
 
 void ChunkMesh::build(){
+    light_levels.clear();
     for(int x = 0; x < cw + 1; x++){
         for(int y = 0; y< ch + 1; y++){
             for(int z = 0; z < cl + 1; z++){
                 Block b = blocks[x + y * (cl + 1) + z * (cw + 1) * (ch + 1)]; //blocks.at(x + 16 * (y + 16 * z));
+                //if(b.get_type() == 0) continue;
 
                 float light = b.get_light() / 15.0f;
+                float lightL = 1.0f, lightR = 1.0f, lightT = 1.0f, lightB = 1.0f, lightF = 1.0f, lightRR = 1.0f;
+                if(x - 1 > 0){
+                    if(blocks[(x - 1) + y * (cl + 1) + z * (cw + 1) * (ch + 1)].get_type() == ID::AIR)
+                        lightL = blocks[(x - 1) + y * (cl + 1) + z * (cw + 1) * (ch + 1)].get_light();
+                }else{
+                    if(cx - 1 >= 0) lightL = world->get_chunk(cx - 1, cz)->get_block(15, y, z).get_light();
+                }
+
+                if(x + 1 < 16){
+                    if(blocks[(x + 1) + y * (cl + 1) + z * (cw + 1) * (ch + 1)].get_type() == ID::AIR)
+                        lightR = blocks[(x + 1) + y * (cl + 1) + z * (cw + 1) * (ch + 1)].get_light();
+                }else{
+                    if(cx + 1 < 16) lightR = world->get_chunk(cx + 1, cz)->get_block(0, y, z).get_light();
+                }
+
+                if(z - 1 > 0){
+                    if(blocks[x + y * (cl + 1) + (z - 1) * (cw + 1) * (ch + 1)].get_type() == ID::AIR){
+                        lightRR = blocks[x + y * (cl + 1) + (z - 1) * (cw + 1) * (ch + 1)].get_light();
+                    }
+                }else{
+                    if(cz - 1 >= 0) lightRR = world->get_chunk(cx, cz - 1)->get_block(x, y, 15).get_light();
+                }
+
+                if(z + 1 < 16){
+                    if(blocks[x + y * (cl + 1) + (z + 1) * (cw + 1) * (ch + 1)].get_type() == ID::AIR){
+                        lightF = blocks[x + y * (cl + 1) + (z + 1) * (cw + 1) * (ch + 1)].get_light();
+                    }
+                }else{
+                    if(cz + 1 < 16) lightF = world->get_chunk(cx, cz + 1)->get_block(x, y, 0).get_light();
+                }
+
+                if(y - 1 > 0){
+                    if(blocks[x + (y - 1) * (cl + 1) + z * (cw + 1) * (ch + 1)].get_type() == ID::AIR)
+                        lightB = blocks[x + (y - 1) * (cl + 1) + z * (cw + 1) * (ch + 1)].get_light();
+                } 
+                if(y + 1 < 256){
+                    if(blocks[x + (y + 1) * (cl + 1) + z * (cw + 1) * (ch + 1)].get_type() == ID::AIR)
+                        lightT = blocks[x + (y + 1) * (cl + 1) + z * (cw + 1) * (ch + 1)].get_light();
+                } 
+
+                lightL /= 15.0f;
+                lightR /= 15.0f;
+                lightT /= 15.0f;
+                lightB /= 15.0f;
+                lightF /= 15.0f;
+                lightRR /= 15.0f;
+
+
+                //std::cout << "LL: " << lightL << "\tLR: " << lightR << "\tLT: " << lightT << "\tLB: " << lightB << "\tLF: " << lightF << "\tLRR: " << lightRR << std::endl;
                 
 
-                float lightL = light + 0.02f;
-                float lightR = light + 0.02f;
-                float lightT = light + 0.04f;
-                float lightB = light + 0.01f;
-                float lightF = light + 0.025f;
-                float lightRR = light + 0.025f;
+                // float lightL = light + 0.02f;
+                // float lightR = light + 0.02f;
+                // float lightT = light + 0.04f;
+                // float lightB = light + 0.01f;
+                // float lightF = light + 0.025f;
+                // float lightRR = light + 0.025f;
                 
-                if(b.get_type() == 0) continue;
+                
+                
 
                 if(is_transparent(x - 1, y, z, b.get_type())){
                     if(b.get_type() != ID::AIR){
@@ -95,18 +147,10 @@ void ChunkMesh::build(){
                             vertices.push_back(cube_vertex_left[i] + x + (cx * 16));
                             vertices.push_back(cube_vertex_left[i + 1] + y);
                             vertices.push_back(cube_vertex_left[i + 2] + z + (cz * 16));
-                            light_levels.push_back(lightL);
+                            light_levels.push_back(lightL + 0.02f);
                         }
                         
                         add_texture_face(b.get_type(), Face::LEFT, texture_coords);
-                    }else{
-                        for(int i = 0; i < 18; i+=3){
-                            tvertices.push_back(cube_vertex_left[i] + x + (cx * 16));
-                            tvertices.push_back(cube_vertex_left[i + 1] + y);
-                            tvertices.push_back(cube_vertex_left[i + 2] + z + (cz * 16));
-                        }
-                        
-                        add_texture_face(b.get_type(), Face::LEFT, ttexture_coords);
                     }
                 }
 
@@ -116,18 +160,10 @@ void ChunkMesh::build(){
                             vertices.push_back(cube_vertex_right[i] + x + (cx * 16));
                             vertices.push_back(cube_vertex_right[i + 1] + y);
                             vertices.push_back(cube_vertex_right[i + 2] + z + (cz * 16));
-                            light_levels.push_back(lightR);
+                            light_levels.push_back(lightR + 0.02f);
                         }
                         
                         add_texture_face(b.get_type(), Face::RIGHT, texture_coords);
-                    }else {
-                        for(int i = 0; i < 18; i+=3){
-                            tvertices.push_back(cube_vertex_right[i] + x + (cx * 16));
-                            tvertices.push_back(cube_vertex_right[i + 1] + y);
-                            tvertices.push_back(cube_vertex_right[i + 2] + z + (cz * 16));
-                        }
-                        
-                        add_texture_face(b.get_type(), Face::RIGHT, ttexture_coords);
                     }
                 }
 
@@ -137,18 +173,10 @@ void ChunkMesh::build(){
                             vertices.push_back(cube_vertex_bottom[i] + x + (cx * 16));
                             vertices.push_back(cube_vertex_bottom[i + 1] + y);
                             vertices.push_back(cube_vertex_bottom[i + 2] + z + (cz * 16));
-                            light_levels.push_back(lightB);
+                            light_levels.push_back(lightB + 0.01f);
                         }
                         
                         add_texture_face(b.get_type(), Face::BOTTOM, texture_coords);
-                    }else{
-                        for(int i = 0; i < 18; i+=3){
-                            tvertices.push_back(cube_vertex_bottom[i] + x + (cx * 16));
-                            tvertices.push_back(cube_vertex_bottom[i + 1] + y);
-                            tvertices.push_back(cube_vertex_bottom[i + 2] + z + (cz * 16));
-                        }
-                        
-                        add_texture_face(b.get_type(), Face::BOTTOM, ttexture_coords);
                     }
                 }
 
@@ -158,18 +186,10 @@ void ChunkMesh::build(){
                             vertices.push_back(cube_vertex_top[i] + x + (cx * 16));
                             vertices.push_back(cube_vertex_top[i + 1] + y);
                             vertices.push_back(cube_vertex_top[i + 2] + z + (cz * 16));
-                            light_levels.push_back(lightT);
+                            light_levels.push_back(lightT + 0.04f);
                         }
                         
                         add_texture_face(b.get_type(), Face::TOP, texture_coords);
-                    }else{
-                        for(int i = 0; i < 18; i+=3){
-                            tvertices.push_back(cube_vertex_top[i] + x + (cx * 16));
-                            tvertices.push_back(cube_vertex_top[i + 1] + y);
-                            tvertices.push_back(cube_vertex_top[i + 2] + z + (cz * 16));
-                        }
-                        
-                        add_texture_face(b.get_type(), Face::TOP, ttexture_coords);
                     }
                 }
 
@@ -179,19 +199,11 @@ void ChunkMesh::build(){
                             vertices.push_back(cube_vertex_back[i] + x + (cx * 16));
                             vertices.push_back(cube_vertex_back[i + 1] + y);
                             vertices.push_back(cube_vertex_back[i + 2] + z + (cz * 16));
-                            light_levels.push_back(lightRR);
+                            light_levels.push_back(lightRR + 0.025f);
                         }
                         
                         add_texture_face(b.get_type(), Face::BACK, texture_coords);
-                    }else{
-                        for(int i = 0; i < 18; i+=3){
-                            tvertices.push_back(cube_vertex_back[i] + x + (cx * 16));
-                            tvertices.push_back(cube_vertex_back[i + 1] + y);
-                            tvertices.push_back(cube_vertex_back[i + 2] + z + (cz * 16));
-                        }
-                        
-                        add_texture_face(b.get_type(), Face::BACK, ttexture_coords);
-                    }                    
+                    }                  
                 }
 
                 if(is_transparent(x, y, z + 1, b.get_type())){
@@ -200,18 +212,10 @@ void ChunkMesh::build(){
                             vertices.push_back(cube_vertex_front[i] + x + (cx * 16));
                             vertices.push_back(cube_vertex_front[i + 1] + y);
                             vertices.push_back(cube_vertex_front[i + 2] + z + (cz * 16));
-                            light_levels.push_back(lightF);
+                            light_levels.push_back(lightF + 0.025f);
                         }
                         
                         add_texture_face(b.get_type(), Face::FRONT, texture_coords);
-                    }else{
-                        for(int i = 0; i < 18; i+=3){
-                            tvertices.push_back(cube_vertex_front[i] + x + (cx * 16));
-                            tvertices.push_back(cube_vertex_front[i + 1] + y);
-                            tvertices.push_back(cube_vertex_front[i + 2] + z + (cz * 16));
-                        }
-                        
-                        add_texture_face(b.get_type(), Face::FRONT, ttexture_coords);
                     }
                 }
                 

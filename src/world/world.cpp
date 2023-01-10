@@ -44,6 +44,28 @@ void World::rander_transparent(GLuint &texture){
     }
 }
 
+void World::rebuild_chunks_around(int cx, int cz){
+    if(cx + 1 < 16){
+        get_chunk(cx + 1, cz)->build_lighting();
+        get_chunk(cx + 1, cz)->rebuild_mesh();
+    }
+
+    if(cx - 1 >= 0){
+        get_chunk(cx - 1, cz)->build_lighting();
+        get_chunk(cx - 1, cz)->rebuild_mesh();
+    }
+
+    if(cz - 1 >= 0){
+        get_chunk(cx, cz - 1)->build_lighting();
+        get_chunk(cx, cz - 1)->rebuild_mesh();
+    }
+
+    if(cz + 1 < 16){
+        get_chunk(cx, cz + 1)->build_lighting();
+        get_chunk(cx, cz + 1)->rebuild_mesh();
+    }
+}
+
 Chunk* World::get_chunk(int cx, int cz){
     for(const auto& c: chunks){
         if(c->get_cx() == cx && c->get_cz() == cz){

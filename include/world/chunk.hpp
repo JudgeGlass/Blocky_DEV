@@ -10,6 +10,8 @@
 #include <world/SimplexNoise.h>
 #include <renderer/chunk_mesh.hpp>
 
+#include <renderer/lighting.hpp>
+
 class World;
 class ChunkMesh;
 class Chunk{
