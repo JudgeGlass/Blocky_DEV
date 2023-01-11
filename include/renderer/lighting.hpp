@@ -1,14 +1,15 @@
 #ifndef __LIGHTING_HPP__
 #define __LIGHTING_HPP__
 
-#include <algorithm>
+#include <queue>
 
 #include <world/chunk.hpp>
 
+class Chunk;
 struct LightNode {
-    LightNode(short i, Chunk *ch) : index(i), chunk(ch);
+    LightNode(int xx, int yy, int zz, Chunk *ch) : x(xx), y(yy), z(zz), chunk(ch){}
 
-    short index;
+    int x, y, z;
     Chunk *chunk;
 };
 

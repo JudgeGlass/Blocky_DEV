@@ -81,7 +81,7 @@ void Player::update(Blocky *game, double delta){
         if(b.get_type() != ID::AIR){
             if(click_sleep >= 0.2f){
                 if(glfwGetMouseButton(game->get_window(), GLFW_MOUSE_BUTTON_1)){   
-                    Block b(xx, yy, zz, ID::AIR, 1.0f, false);      
+                    Block b(xx, yy, zz, ID::AIR, 1.0f, true);      
                     world->get_chunk(cx, cz)->set_block(b);
                     world->get_chunk(cx, cz)->build_lighting();
                     world->get_chunk(cx, cz)->rebuild_mesh();
@@ -94,7 +94,7 @@ void Player::update(Blocky *game, double delta){
                 }
 
                 if(glfwGetMouseButton(game->get_window(), GLFW_MOUSE_BUTTON_2)){  
-                    Block b((int)last_pos.x % 16, (int)last_pos.y, (int)last_pos.z % 16, ID::GRASS, 1.0f, false); 
+                    Block b((int)last_pos.x % 16, (int)last_pos.y, (int)last_pos.z % 16, ID::DIRT, 1.0f, true); 
                     world->get_chunk(cx, cz)->set_block(b);
                     world->get_chunk(cx, cz)->build_lighting();
                     world->get_chunk(cx, cz)->rebuild_mesh();
