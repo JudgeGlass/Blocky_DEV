@@ -68,7 +68,6 @@ void gen_lighting(Chunk *c, World *world){
         else{
             if(cz + 1 < 16){
                 b_front = world->get_chunk(cx, cz + 1)->get_block(x, y, 0);
-                //std::cout << "Y: " << (int)b_front->get_y() << "\tLL: " << b_front->get_light() << std::endl;
             }
         }
 
@@ -86,16 +85,11 @@ void gen_lighting(Chunk *c, World *world){
             b_top = chunk->get_block(x, y + 1, z);
         }
 
-        //std::cout << "X: " << x << "\tY: " << y << "\tZ: " << z << "\tCX: " << chunk->get_cx() << "\tCZ: " << chunk->get_cz() << "\tL: " << light << std::endl;
-
-
-        //std::cout << "LEFT" << std::endl;
         if(b_left != nullptr){
             if(b_left->get_type() == ID::AIR && b_left->get_light() + 2 <= light){
 
                 b_left->set_light_level(light - 1);
 
-                short index = (x - 1) + y * 16 + z * 16 * 256;
                 if(x - 1 < 0){
                     lightQueue.emplace(15, y, z, world->get_chunk(cx - 1, cz));
                 }else {
@@ -104,13 +98,10 @@ void gen_lighting(Chunk *c, World *world){
             }
         }
 
-
-        //std::cout << "RIGHT" << std::endl;
         if(b_right != nullptr){
             if(b_right->get_type() == ID::AIR && b_right->get_light() + 2 <= light){
                 b_right->set_light_level(light - 1);
 
-                short index = (x + 1) + y * 16 + z * 16 * 256;
                 if(x + 1 > 15){
                     lightQueue.emplace(0, y, z, world->get_chunk(cx + 1, cz));
                 }else {
@@ -119,13 +110,10 @@ void gen_lighting(Chunk *c, World *world){
             }
         }
 
-
-        //std::cout << "FRONT" << std::endl;
         if(b_front != nullptr){
             if(b_front->get_type() == ID::AIR && b_front->get_light() + 2 <= light){
                 b_front->set_light_level(light - 1);
 
-                short index = x + y * 16 + (z + 1) * 16 * 256;
                 if(z + 1 > 15){
                     lightQueue.emplace(x, y, 0, world->get_chunk(cx, cz + 1));
                 }else {
@@ -134,13 +122,10 @@ void gen_lighting(Chunk *c, World *world){
             }
         }
 
-
-        //std::cout << "BACK" << std::endl;
         if(b_back != nullptr){
             if(b_back->get_type() == ID::AIR && b_back->get_light() + 2 <= light){
                 b_back->set_light_level(light - 1);
 
-                short index = x + y * 16 + (z - 1) * 16 * 256;
                 if(z - 1 < 0){
                     lightQueue.emplace(x, y, 15, world->get_chunk(cx, cz - 1));
                 }else {
@@ -149,30 +134,21 @@ void gen_lighting(Chunk *c, World *world){
             }
         }
 
-
-        //std::cout << "TOP" << std::endl;
         if(b_top != nullptr){
             if(b_top->get_type() == ID::AIR && b_top->get_light() + 2 <= light){
                 b_top->set_light_level(light - 1);
-
-                short index = x + (y + 1) * 16 + z * 16 * 256;
 
                 lightQueue.emplace(x, y + 1, z, chunk);
             }
         }
 
-
-        //std::cout << "BOTTOM" << std::endl;
         if(b_bottom != nullptr) {
             if (b_bottom->get_type() == ID::AIR && b_bottom->get_light() + 2 <= light) {
                 b_bottom->set_light_level(light - 1);
 
-                short index = x + (y - 1) * 16 + z * 16 * 256;
-
                 lightQueue.emplace(x, y - 1, z, chunk);
             }
         }
-        //if(chunk->get_block(x).get_type() != ID::AIR && chunk->)
     }
 
     std::cout << "LIGHT DONE!" << std::endl;
