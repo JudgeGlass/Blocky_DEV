@@ -24,9 +24,10 @@ add_executable(blocky
     src/renderer/renderer.cpp
     src/renderer/chunk_mesh.cpp
     src/renderer/hud.cpp
+    src/renderer/lighting.cpp
 
     src/world/chunk.cpp
     src/world/world.cpp
     src/world/player.cpp
     src/world/SimplexNoise.cpp
-)
+        src/renderer/lighting.cpp)

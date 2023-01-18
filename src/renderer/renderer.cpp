@@ -7,7 +7,7 @@ Renderer::Renderer(Blocky *game){
 void Renderer::init(){
     world = new World(16, 16);
 
-    shader = new Shader("vertex.glsl", "fragment.glsl");
+    shader = new Shader("../resources/shaders/vertex.glsl", "../resources/shaders/fragment.glsl");
     
     shader->load_shader();
 
@@ -17,7 +17,7 @@ void Renderer::init(){
 
     // Make Texture
     int width, height, nrChannels;
-    unsigned char *data = stbi_load("atlas.png", &width, &height, &nrChannels, 0);
+    unsigned char *data = stbi_load("../resources/textures/atlas.png", &width, &height, &nrChannels, 0);
     if(!data){
         std::cout << "Failed to load texture" << std::endl;
     }
@@ -60,7 +60,7 @@ void Renderer::draw(){
     
     world->get_player()->render(shader);
     world->render(texture);
-    world->rander_transparent(texture);
+    world->render_transparent(texture);
 
     glUseProgram(0);
 }

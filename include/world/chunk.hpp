@@ -28,7 +28,7 @@ class Chunk{
 
         void set_block(Block b);
 
-        Block& get_block(unsigned char x, unsigned char y, unsigned char z);
+        Block* get_block(unsigned char x, unsigned char y, unsigned char z);
 
         int get_cx() const;
         int get_cz() const;

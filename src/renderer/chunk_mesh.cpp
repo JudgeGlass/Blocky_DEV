@@ -25,7 +25,7 @@ ChunkMesh::ChunkMesh(Block *blocks, int cx, int cz, const unsigned char cw, cons
 bool ChunkMesh::is_transparent(int x, int y, int z, unsigned char block_id){
     //std::cout << "DISABLE FACE: " << disable_faces << std::endl;
     if(y < 0 || y > ch || !disable_faces) return 1; // || x < 0 || x > 15 || z < 0 || z > 15
-    Block b;
+    Block *b = nullptr;
     if(x < 0){
         if(cx - 1 >= 0){
             b = world->get_chunk(cx - 1, cz)->get_block(15, y, z);
@@ -52,15 +52,15 @@ bool ChunkMesh::is_transparent(int x, int y, int z, unsigned char block_id){
         }
     }else{
         //b = blocks.at(x + y * 16 + z * 16 * 256);
-        b = blocks[x + y * (cl + 1) + z * (cw + 1) * (ch + 1)];
+        b = &blocks[x + y * (cl + 1) + z * (cw + 1) * (ch + 1)];
     }
 
     
     
 
-    if(b.get_type() == ID::GLASS && block_id == ID::GLASS) return 0; 
+    if(b->get_type() == ID::GLASS && block_id == ID::GLASS) return 0;
 
-    switch (b.get_type())
+    switch (b->get_type())
     {
     case ID::AIR:
     case ID::GLASS:
@@ -80,63 +80,63 @@ void ChunkMesh::build(){
                 //if(b.get_type() == 0) continue;
 
                 float light = b.get_light() / 15.0f;
-                // float lightL = 1.0f, lightR = 1.0f, lightT = 1.0f, lightB = 1.0f, lightF = 1.0f, lightRR = 1.0f;
-                // if(x - 1 > 0){
-                //     if(blocks[(x - 1) + y * (cl + 1) + z * (cw + 1) * (ch + 1)].get_type() == ID::AIR)
-                //         lightL = blocks[(x - 1) + y * (cl + 1) + z * (cw + 1) * (ch + 1)].get_light();
-                // }else{
-                //     if(cx - 1 >= 0) lightL = world->get_chunk(cx - 1, cz)->get_block(15, y, z).get_light();
-                // }
+                 float lightL = 1.0f, lightR = 1.0f, lightT = 1.0f, lightB = 1.0f, lightF = 1.0f, lightRR = 1.0f;
+                 if(x - 1 > 0){
+                     if(blocks[(x - 1) + y * (cl + 1) + z * (cw + 1) * (ch + 1)].get_type() == ID::AIR)
+                         lightL = blocks[(x - 1) + y * (cl + 1) + z * (cw + 1) * (ch + 1)].get_light();
+                 }else{
+                     if(cx - 1 >= 0) lightL = world->get_chunk(cx - 1, cz)->get_block(15, y, z)->get_light();
+                 }
 
-                // if(x + 1 < 16){
-                //     if(blocks[(x + 1) + y * (cl + 1) + z * (cw + 1) * (ch + 1)].get_type() == ID::AIR)
-                //         lightR = blocks[(x + 1) + y * (cl + 1) + z * (cw + 1) * (ch + 1)].get_light();
-                // }else{
-                //     if(cx + 1 < 16) lightR = world->get_chunk(cx + 1, cz)->get_block(0, y, z).get_light();
-                // }
+                 if(x + 1 < 16){
+                     if(blocks[(x + 1) + y * (cl + 1) + z * (cw + 1) * (ch + 1)].get_type() == ID::AIR)
+                         lightR = blocks[(x + 1) + y * (cl + 1) + z * (cw + 1) * (ch + 1)].get_light();
+                 }else{
+                     if(cx + 1 < 16) lightR = world->get_chunk(cx + 1, cz)->get_block(0, y, z)->get_light();
+                 }
 
-                // if(z - 1 > 0){
-                //     if(blocks[x + y * (cl + 1) + (z - 1) * (cw + 1) * (ch + 1)].get_type() == ID::AIR){
-                //         lightRR = blocks[x + y * (cl + 1) + (z - 1) * (cw + 1) * (ch + 1)].get_light();
-                //     }
-                // }else{
-                //     if(cz - 1 >= 0) lightRR = world->get_chunk(cx, cz - 1)->get_block(x, y, 15).get_light();
-                // }
+                 if(z - 1 > 0){
+                     if(blocks[x + y * (cl + 1) + (z - 1) * (cw + 1) * (ch + 1)].get_type() == ID::AIR){
+                         lightRR = blocks[x + y * (cl + 1) + (z - 1) * (cw + 1) * (ch + 1)].get_light();
+                     }
+                 }else{
+                     if(cz - 1 >= 0) lightRR = world->get_chunk(cx, cz - 1)->get_block(x, y, 15)->get_light();
+                 }
 
-                // if(z + 1 < 16){
-                //     if(blocks[x + y * (cl + 1) + (z + 1) * (cw + 1) * (ch + 1)].get_type() == ID::AIR){
-                //         lightF = blocks[x + y * (cl + 1) + (z + 1) * (cw + 1) * (ch + 1)].get_light();
-                //     }
-                // }else{
-                //     if(cz + 1 < 16) lightF = world->get_chunk(cx, cz + 1)->get_block(x, y, 0).get_light();
-                // }
+                 if(z + 1 < 16){
+                     if(blocks[x + y * (cl + 1) + (z + 1) * (cw + 1) * (ch + 1)].get_type() == ID::AIR){
+                         lightF = blocks[x + y * (cl + 1) + (z + 1) * (cw + 1) * (ch + 1)].get_light();
+                     }
+                 }else{
+                     if(cz + 1 < 16) lightF = world->get_chunk(cx, cz + 1)->get_block(x, y, 0)->get_light();
+                 }
 
-                // if(y - 1 > 0){
-                //     if(blocks[x + (y - 1) * (cl + 1) + z * (cw + 1) * (ch + 1)].get_type() == ID::AIR)
-                //         lightB = blocks[x + (y - 1) * (cl + 1) + z * (cw + 1) * (ch + 1)].get_light();
-                // } 
-                // if(y + 1 < 256){
-                //     if(blocks[x + (y + 1) * (cl + 1) + z * (cw + 1) * (ch + 1)].get_type() == ID::AIR)
-                //         lightT = blocks[x + (y + 1) * (cl + 1) + z * (cw + 1) * (ch + 1)].get_light();
-                // } 
+                 if(y - 1 > 0){
+                     if(blocks[x + (y - 1) * (cl + 1) + z * (cw + 1) * (ch + 1)].get_type() == ID::AIR)
+                         lightB = blocks[x + (y - 1) * (cl + 1) + z * (cw + 1) * (ch + 1)].get_light();
+                 }
+                 if(y + 1 < 256){
+                     if(blocks[x + (y + 1) * (cl + 1) + z * (cw + 1) * (ch + 1)].get_type() == ID::AIR)
+                         lightT = blocks[x + (y + 1) * (cl + 1) + z * (cw + 1) * (ch + 1)].get_light();
+                 }
 
-                // lightL /= 15.0f;
-                // lightR /= 15.0f;
-                // lightT /= 15.0f;
-                // lightB /= 15.0f;
-                // lightF /= 15.0f;
-                // lightRR /= 15.0f;
+                 lightL /= 15.0f;
+                 lightR /= 15.0f;
+                 lightT /= 15.0f;
+                 lightB /= 15.0f;
+                 lightF /= 15.0f;
+                 lightRR /= 15.0f;
 
 
                 //std::cout << "LL: " << lightL << "\tLR: " << lightR << "\tLT: " << lightT << "\tLB: " << lightB << "\tLF: " << lightF << "\tLRR: " << lightRR << std::endl;
                 
 
-                float lightL = light;
-                float lightR = light;
-                float lightT = light;
-                float lightB = light;
-                float lightF = light;
-                float lightRR = light;
+//                float lightL = light;
+//                float lightR = light;
+//                float lightT = light;
+//                float lightB = light;
+//                float lightF = light;
+//                float lightRR = light;
                 
                 
                 

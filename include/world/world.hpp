@@ -18,7 +18,7 @@ class World{
         void generate();
 
         void render(GLuint &texture);
-        void rander_transparent(GLuint &texture);
+        void render_transparent(GLuint &texture);
         void rebuild_chunks_around(int cx, int cz);
 
         Chunk* get_chunk(int cx, int cz);
