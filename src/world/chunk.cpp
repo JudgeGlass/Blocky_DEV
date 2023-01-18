@@ -28,8 +28,13 @@ void Chunk::generate(){
                 //std::cout << "N: " << n << std::endl;
 
 
-                if(y < 20 && y > 15 && x < 11 && x > 8){
+                if(y < 20 && y > 15 ){
                     blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::AIR, 1.0f, false);
+                    continue;
+                }
+
+                if(z == 15) {
+                    blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::DIRT, 1.0f, false);
                     continue;
                 }
 

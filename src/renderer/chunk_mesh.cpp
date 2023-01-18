@@ -81,7 +81,7 @@ void ChunkMesh::build(){
 
                 float light = b.get_light() / 15.0f;
                  float lightL = 1.0f, lightR = 1.0f, lightT = 1.0f, lightB = 1.0f, lightF = 1.0f, lightRR = 1.0f;
-                 if(x - 1 > 0){
+                 if(x - 1 >= 0){
                      if(blocks[(x - 1) + y * (cl + 1) + z * (cw + 1) * (ch + 1)].get_type() == ID::AIR)
                          lightL = blocks[(x - 1) + y * (cl + 1) + z * (cw + 1) * (ch + 1)].get_light();
                  }else{
@@ -95,7 +95,7 @@ void ChunkMesh::build(){
                      if(cx + 1 < 16) lightR = world->get_chunk(cx + 1, cz)->get_block(0, y, z)->get_light();
                  }
 
-                 if(z - 1 > 0){
+                 if(z - 1 >= 0){
                      if(blocks[x + y * (cl + 1) + (z - 1) * (cw + 1) * (ch + 1)].get_type() == ID::AIR){
                          lightRR = blocks[x + y * (cl + 1) + (z - 1) * (cw + 1) * (ch + 1)].get_light();
                      }
@@ -111,7 +111,7 @@ void ChunkMesh::build(){
                      if(cz + 1 < 16) lightF = world->get_chunk(cx, cz + 1)->get_block(x, y, 0)->get_light();
                  }
 
-                 if(y - 1 > 0){
+                 if(y - 1 >= 0){
                      if(blocks[x + (y - 1) * (cl + 1) + z * (cw + 1) * (ch + 1)].get_type() == ID::AIR)
                          lightB = blocks[x + (y - 1) * (cl + 1) + z * (cw + 1) * (ch + 1)].get_light();
                  }

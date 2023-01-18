@@ -13,9 +13,9 @@ void gen_lighting(Chunk *c, World *world){
                     lightQueue.emplace(x, y, z, c);
                 }
 
-                if(!b->get_is_sky()){
-                    b->set_light_level(1.0f);
-                }
+//                if(!b->get_is_sky()){
+//                    b->set_light_level(1.0f);
+//                }
             }
         }
     }
@@ -68,10 +68,11 @@ void gen_lighting(Chunk *c, World *world){
         else{
             if(cz + 1 < 16){
                 b_front = world->get_chunk(cx, cz + 1)->get_block(x, y, 0);
+                //std::cout << "Y: " << (int)b_front->get_y() << "\tLL: " << b_front->get_light() << std::endl;
             }
         }
 
-        if(z - 1 > 0) b_back = chunk->get_block(x, y, z - 1);
+        if(z - 1 >= 0) b_back = chunk->get_block(x, y, z - 1);
         else{
             if(cz - 1 >= 0){
                 b_back = world->get_chunk(cx, cz - 1)->get_block(x, y, 15);
@@ -96,7 +97,7 @@ void gen_lighting(Chunk *c, World *world){
 
                 short index = (x - 1) + y * 16 + z * 16 * 256;
                 if(x - 1 < 0){
-                    chunk = world->get_chunk(cx - 1, cz);
+                    lightQueue.emplace(15, y, z, world->get_chunk(cx - 1, cz));
                 }else {
                     lightQueue.emplace(x - 1, y, z, chunk);
                 }
@@ -111,7 +112,7 @@ void gen_lighting(Chunk *c, World *world){
 
                 short index = (x + 1) + y * 16 + z * 16 * 256;
                 if(x + 1 > 15){
-                    chunk = world->get_chunk(cx + 1, cz);
+                    lightQueue.emplace(0, y, z, world->get_chunk(cx + 1, cz));
                 }else {
                     lightQueue.emplace(x + 1, y, z, chunk);
                 }
@@ -126,7 +127,7 @@ void gen_lighting(Chunk *c, World *world){
 
                 short index = x + y * 16 + (z + 1) * 16 * 256;
                 if(z + 1 > 15){
-                    chunk = world->get_chunk(cx, cz + 1);
+                    lightQueue.emplace(x, y, 0, world->get_chunk(cx, cz + 1));
                 }else {
                     lightQueue.emplace(x, y, z + 1, chunk);
                 }
@@ -141,7 +142,7 @@ void gen_lighting(Chunk *c, World *world){
 
                 short index = x + y * 16 + (z - 1) * 16 * 256;
                 if(z - 1 < 0){
-                    chunk = world->get_chunk(cx, cz - 1);
+                    lightQueue.emplace(x, y, 15, world->get_chunk(cx, cz - 1));
                 }else {
                     lightQueue.emplace(x, y, z - 1, chunk);
                 }
