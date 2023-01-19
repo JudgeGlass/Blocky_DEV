@@ -37,3 +37,5 @@ To run, simpily run (in build directory)
 
 ## Image
 ![Demo image of blocky](https://github.com/JudgeGlass/Blocky_DEV/blob/main/resources/demo.png?raw=true)
+![Demo image of blocky](https://github.com/JudgeGlass/Blocky_DEV/blob/main/resources/demo_light.png?raw=true)
+![Demo image of blocky](https://github.com/JudgeGlass/Blocky_DEV/blob/main/resources/demo_light2.png?raw=true)
