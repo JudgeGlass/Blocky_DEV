@@ -45,35 +45,60 @@ void World::render_transparent(GLuint &texture){
 }
 
 void World::rebuild_chunks_around(int cx, int cz){
+    std::vector<int> w_vec;
+
+    get_chunk(cx, cz)->clear_lighting();
+    w_vec.push_back(cx);
+    w_vec.push_back(cz);
+
     if(cx + 1 < 16){
-        get_chunk(cx + 1, cz)->build_lighting();
-        get_chunk(cx + 1, cz)->rebuild_mesh();
+        get_chunk(cx + 1, cz)->clear_lighting();
+        w_vec.push_back(cx + 1);
+        w_vec.push_back(cz);
     }
 
     if(cx - 1 >= 0){
-        get_chunk(cx - 1, cz)->build_lighting();
-        get_chunk(cx - 1, cz)->rebuild_mesh();
+        get_chunk(cx - 1, cz)->clear_lighting();
+        w_vec.push_back(cx - 1);
+        w_vec.push_back(cz);
     }
 
     if(cz - 1 >= 0){
-        get_chunk(cx, cz - 1)->build_lighting();
-        get_chunk(cx, cz - 1)->rebuild_mesh();
+        get_chunk(cx, cz - 1)->clear_lighting();
+        w_vec.push_back(cx);
+        w_vec.push_back(cz - 1);
     }
 
     if(cz + 1 < 16){
-        get_chunk(cx, cz + 1)->build_lighting();
-        get_chunk(cx, cz + 1)->rebuild_mesh();
+        get_chunk(cx, cz + 1)->clear_lighting();
+        w_vec.push_back(cx);
+        w_vec.push_back(cz + 1);
     }
+
+    for(int i = 0; i < w_vec.size(); i+=2){
+        get_chunk(w_vec.at(i), w_vec.at(i+1))->build_lighting();
+        //get_chunk(w_vec.at(i), w_vec.at(i+1))->rebuild_mesh();
+    }
+
+    for(int i = 0; i < w_vec.size(); i+=2){
+        get_chunk(w_vec.at(i), w_vec.at(i+1))->rebuild_mesh();
+    }
+
+    w_vec.clear();
 }
 
 Chunk* World::get_chunk(int cx, int cz){
-    for(const auto& c: chunks){
-        if(c->get_cx() == cx && c->get_cz() == cz){
-            return c;
-        }
-    }
+//    for(const auto& c: chunks){
+//        if(c->get_cx() == cx && c->get_cz() == cz){
+//            return c;
+//        }
+//    }
 
-    return nullptr;
+    int index = cz + cx * 16;
+
+    if(index > 16 * 16) return nullptr;
+
+    return chunks.at(index);
 }
 
 std::vector<Chunk*> World::get_chunks(){

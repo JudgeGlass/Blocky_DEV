@@ -8,20 +8,15 @@ void gen_lighting(Chunk *c, World *world){
             for(int z = 0; z < 16; z++){
                 Block *b = c->get_block(x, y, z);
 
-                if(b->get_is_sky()){
+                if(b->get_is_sky() && b->get_light()){
                     //std::cout << "ADDING:\tX: " << x << "\tY: " << y << "\tZ: " << z << std::endl;
                     lightQueue.emplace(x, y, z, c);
                 }
-
-//                if(!b->get_is_sky()){
-//                    b->set_light_level(1.0f);
-//                }
             }
         }
     }
 
-    while(lightQueue.empty() == false){
-        //std::cout << "Light Queue Size; " << lightQueue.size() << std::endl;
+    while(!lightQueue.empty()){
         LightNode &node = lightQueue.front();
 
         Chunk *chunk = node.chunk;
@@ -31,8 +26,6 @@ void gen_lighting(Chunk *c, World *world){
         unsigned char y = node.y;
 
         unsigned char z = node.z;
-
-        //std::cout << "X: " << std::to_string((int)x) << "\tY: " << std::to_string(y) << "\tZ: " << std::to_string(z) << "\tCX: " << chunk->get_cx() << "\tCZ: " << chunk->get_cz() << std::endl;
 
         lightQueue.pop();
 
@@ -86,9 +79,8 @@ void gen_lighting(Chunk *c, World *world){
         }
 
         if(b_left != nullptr){
-            if(b_left->get_type() == ID::AIR && b_left->get_light() + 2 <= light){
-
-                b_left->set_light_level(light - 1);
+            if((b_left->get_type() == ID::AIR || b_left->get_type() == ID::GLASS) && (float)b_left->get_light() + 2 <= light){
+                b_left->set_light_level((unsigned char)(light - 1));
 
                 if(x - 1 < 0){
                     lightQueue.emplace(15, y, z, world->get_chunk(cx - 1, cz));
@@ -99,8 +91,8 @@ void gen_lighting(Chunk *c, World *world){
         }
 
         if(b_right != nullptr){
-            if(b_right->get_type() == ID::AIR && b_right->get_light() + 2 <= light){
-                b_right->set_light_level(light - 1);
+            if((b_right->get_type() == ID::AIR || b_right->get_type() == ID::GLASS) && (float)b_right->get_light() + 2 <= light){
+                b_right->set_light_level((unsigned char)light - 1);
 
                 if(x + 1 > 15){
                     lightQueue.emplace(0, y, z, world->get_chunk(cx + 1, cz));
@@ -111,8 +103,8 @@ void gen_lighting(Chunk *c, World *world){
         }
 
         if(b_front != nullptr){
-            if(b_front->get_type() == ID::AIR && b_front->get_light() + 2 <= light){
-                b_front->set_light_level(light - 1);
+            if((b_front->get_type() == ID::AIR || b_front->get_type() == ID::GLASS) && (float)b_front->get_light() + 2 <= light){
+                b_front->set_light_level((unsigned char)light - 1);
 
                 if(z + 1 > 15){
                     lightQueue.emplace(x, y, 0, world->get_chunk(cx, cz + 1));
@@ -123,8 +115,8 @@ void gen_lighting(Chunk *c, World *world){
         }
 
         if(b_back != nullptr){
-            if(b_back->get_type() == ID::AIR && b_back->get_light() + 2 <= light){
-                b_back->set_light_level(light - 1);
+            if((b_back->get_type() == ID::AIR || b_back->get_type() == ID::GLASS) && (float)b_back->get_light() + 2 <= light){
+                b_back->set_light_level((unsigned char)light - 1);
 
                 if(z - 1 < 0){
                     lightQueue.emplace(x, y, 15, world->get_chunk(cx, cz - 1));
@@ -135,16 +127,15 @@ void gen_lighting(Chunk *c, World *world){
         }
 
         if(b_top != nullptr){
-            if(b_top->get_type() == ID::AIR && b_top->get_light() + 2 <= light){
-                b_top->set_light_level(light - 1);
-
+            if((b_top->get_type() == ID::AIR || b_top->get_type() == ID::GLASS) && (float)b_top->get_light() + 2 <= light){
+                b_top->set_light_level((unsigned char)light - 1);
                 lightQueue.emplace(x, y + 1, z, chunk);
             }
         }
 
         if(b_bottom != nullptr) {
-            if (b_bottom->get_type() == ID::AIR && b_bottom->get_light() + 2 <= light) {
-                b_bottom->set_light_level(light - 1);
+            if ((b_bottom->get_type() == ID::AIR || b_bottom->get_type() == ID::GLASS) && (float)b_bottom->get_light() + 2 <= light) {
+                b_bottom->set_light_level((unsigned char)light - 1);
 
                 lightQueue.emplace(x, y - 1, z, chunk);
             }

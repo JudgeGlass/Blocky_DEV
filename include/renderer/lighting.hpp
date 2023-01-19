@@ -16,6 +16,15 @@ struct LightNode {
     Chunk *chunk;
 };
 
+struct LightRemoveNode {
+    LightRemoveNode(unsigned char xx, unsigned char yy, unsigned char zz, Chunk *ch, float val) : x(xx), y(yy), z(zz), chunk(ch), value(val){}
+
+    unsigned char x, y, z;
+    float value;
+    Chunk *chunk;
+};
+
 void gen_lighting(Chunk *c, World *world);
+void del_lighting(Chunk *c, World *world, int bx, int by, int bz);
 
 #endif

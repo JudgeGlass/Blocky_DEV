@@ -23,6 +23,7 @@ class Chunk{
         void build_mesh();
         void rebuild_mesh();
         void build_lighting();
+        void clear_lighting();
         void render(GLuint texture);
         void render_transparent(GLuint texture);
 

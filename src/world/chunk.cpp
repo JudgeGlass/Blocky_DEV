@@ -29,19 +29,19 @@ void Chunk::generate(){
 
 
                 if(y < 20 && y > 15 ) {
-                    blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::AIR, 1.0f, false);
+                    blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::AIR, 1, false);
                     continue;
                 }
 
                 if(y <= l_start){
                     if(y == l_start)
-                        blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::GRASS, 1.0f, false);
+                        blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::GRASS, 1, false);
                     else if(y <= l_start - 1 && y >= l_start - 6)
-                        blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::DIRT, 1.0f, false);
+                        blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::DIRT, 1, false);
                     else
-                        blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::STONE, 1.0f, false);
+                        blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::STONE, 1, false);
                 }else{
-                    blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::AIR, 15.0f, true);
+                    blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::AIR, 15, true);
                 }
                 // if(y > 60){
                 //     //blocks.push_back(Block(x, y, z, ID::AIR));
@@ -75,6 +75,13 @@ void Chunk::rebuild_mesh(){
 
 void Chunk::build_lighting(){
     gen_lighting(this, world);
+}
+
+void Chunk::clear_lighting(){
+    for(auto& b: blocks){
+        if(!b.get_is_sky())
+            b.set_light_level(1);
+    }
 }
 
 Block* Chunk::get_block(unsigned char x, unsigned char y, unsigned char z)  {
