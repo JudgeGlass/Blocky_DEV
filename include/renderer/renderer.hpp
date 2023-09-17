@@ -10,11 +10,13 @@
 
 #include <game/blocky.hpp>
 #include <renderer/shader.hpp>
+#include <renderer/hud.hpp>
 #include <world/world.hpp>
 #include <stb_image.h>
 
 class Blocky;
 class World;
+class HUD;
 class Renderer{
     public:
         Renderer(Blocky *game);
@@ -36,6 +38,7 @@ class Renderer{
         double delta = 0.0f;
 
         World *world = nullptr;
+        HUD *hud = nullptr;
 
         GLuint texture;
 };

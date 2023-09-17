@@ -2,12 +2,16 @@
 #define __BLOCKY_HPP__
 
 #include <iostream>
+#include <memory>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include <renderer/renderer.hpp>
 #include <game/global.hpp>
+#include <chrono>
+
+const bool LIGHTING = true;
 
 static void glfw_error_callback(int error, const char *msg);
 static void glfw_window_size_callback(GLFWwindow *window, int width, int height);
@@ -31,16 +35,17 @@ class Blocky{
 
         GLFWwindow* get_window() const;
 
-        Renderer* get_renderer() const;
+        std::shared_ptr<Renderer> get_renderer() const;
 
     private: 
         int screen_width;
         int screen_height;
 
         GLFWwindow *window = nullptr;
+        //std::shared_ptr<GLFWwindow> window;
 
-        Renderer *renderer = nullptr;
-
+        //Renderer *renderer = nullptr;
+        std::shared_ptr<Renderer> renderer;
 };
 
 #endif

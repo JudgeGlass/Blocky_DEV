@@ -7,6 +7,17 @@ Renderer::Renderer(Blocky *game){
 void Renderer::init(){
     world = new World(16, 16);
 
+    hud = new HUD(std::shared_ptr<Player>(world->get_player()));
+
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO &io = ImGui::GetIO(); (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    ImGui::StyleColorsDark();
+
+    ImGui_ImplGlfw_InitForOpenGL(game->get_window(), true);
+    ImGui_ImplOpenGL3_Init("#version 330");
+
     shader = new Shader("../resources/shaders/vertex.glsl", "../resources/shaders/fragment.glsl");
     
     shader->load_shader();
@@ -25,9 +36,9 @@ void Renderer::init(){
     glActiveTexture(GL_TEXTURE0);
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
-
+    glEnable(GL_TEXTURE_2D);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST); 
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
 
@@ -48,6 +59,8 @@ void Renderer::draw(){
     current_time = glfwGetTime();
     delta = current_time - last_time;
     last_time = current_time;
+
+    hud->render(delta);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0.4f, 0.7f, 1.0f, 1);

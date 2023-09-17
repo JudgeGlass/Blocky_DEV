@@ -1,6 +1,8 @@
 #include <renderer/lighting.hpp>
 
 void gen_lighting(Chunk *c, World *world){
+    if(!LIGHTING) return;
+
     std::queue<LightNode> lightQueue;
 
     for(int y = 255; y >= 0; y--){

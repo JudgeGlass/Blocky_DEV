@@ -8,7 +8,6 @@ vertex_file(vertex_file), fragment_file(fragment_file) {
 void Shader::load_shader(){
     vertex_shader_id = glCreateShader(GL_VERTEX_SHADER);
 	fragment_shader_id = glCreateShader(GL_FRAGMENT_SHADER);
-	
 
 	// Read the Vertex Shader code from the file
 	std::string VertexShaderCode;

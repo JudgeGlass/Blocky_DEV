@@ -1,44 +1,28 @@
 #include <renderer/hud.hpp>
 
-HUD::HUD(){
-    shader = new Shader(vertex_file, fragment_file);
-
-    shader->load_shader();
-    shader_program_id = shader->get_program_id();
-
-    int width, height, nrChannels;
-    unsigned char *data = stbi_load("hud.png", &width, &height, &nrChannels, 0);
-    if(!data){
-        std::cout << "Failed to load texture" << std::endl;
-    }
-
-    glActiveTexture(GL_TEXTURE1);
-    glGenTextures(1, &texture_id);
-    glBindTexture(GL_TEXTURE_2D, texture_id);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST); 
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-    glGenerateMipmap(GL_TEXTURE_2D);
-    stbi_image_free(data);
-
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
-
-    glGenBuffers(1, &VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-    glGenBuffers(1, &TBO);
-    glBindBuffer(GL_ARRAY_BUFFER, TBO);
+HUD::HUD(std::shared_ptr<Player> player){
+    this->player = player;
 }
 
-void HUD::render(double delta){
 
+
+void HUD::render(double delta){
+    drawDebug();
+}
+
+void HUD::drawDebug() {
+    ImGui::Begin("Game Info:");
+    ImGui::SetWindowSize(ImVec2(300, 200));
+    ImGui::SetWindowPos(ImVec2(0, 0));
+    ImGui::Text("Game Version: %s", VERSION);
+    ImGui::Text("Pos[X/Y/Z]: %.02f / %.02f / %.02f", player->get_pos().x, player->get_pos().y, player->get_pos().z);
+    ImGui::Text("Cam[yaw/pitch]: %.02f / %.02f", player->get_cam_pos().x, player->get_cam_pos().y);
+    ImGui::Text("Show Polys: %s", (player->get_show_polygons()) ? "true" : "false");
+    ImGui::Text("Block[type/light]: %d / %d", player->get_current_block().get_type(), player->get_current_block().get_light());
+    //ImGui::GetWindowDrawList()->AddText(ImVec2(250, 250), ImColor(255, 255, 255, 255), "+");
+    ImGui::End();
 }
 
 HUD::~HUD(){
-    delete shader;
+
 }

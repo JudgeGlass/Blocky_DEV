@@ -25,8 +25,13 @@ class Player{
         void set_mouse_pos(const double x, const double y);
 
         const glm::vec3& get_pos() const;
+        const glm::vec2 get_cam_pos() const;
+        const bool get_show_polygons() const;
+        const Block& get_current_block() const;
         
     private:
+        bool show_polys = false;
+        Block current_block;
         double mouse_x = 0.0f;
         double mouse_y = 0.0f;
         double click_sleep = 0.0f; // 250ms

@@ -2,33 +2,30 @@
 #define __HUD_HPP__
 
 #include <string>
+#include <vector>
+#include <memory>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
-#include <stb_image.h>
 
 #include <renderer/shader.hpp>
+#include <renderer/font.hpp>
 #include <game/global.hpp>
 #include <game/blocky.hpp>
 
+class Player;
 class HUD{
     public:
-        HUD();
+        HUD(std::shared_ptr<Player> player);
         ~HUD();
 
         void render(double delta);
 
     private:
-        Shader *shader = nullptr;
-        std::string fragment_file;
-        std::string vertex_file;
+        std::shared_ptr<Player> player;
 
-        GLuint VAO;
-        GLuint VBO;
-        GLuint TBO;
-        GLuint texture_id;
-        GLuint shader_program_id;
+        void drawDebug();
 };
 
 #endif

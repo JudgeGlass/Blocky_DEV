@@ -18,7 +18,6 @@ void Player::render(Shader *shader){
     
     GLuint matrixID = shader->get_uniform_location("MVP");
     glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0]);
-
 }
 
 void Player::update(Blocky *game, double delta){
@@ -59,8 +58,8 @@ void Player::update(Blocky *game, double delta){
     glm::vec3 last_pos;
 
     click_sleep += delta;
-    //std::cout << "DELTA: " << delta * 1000 << "\tSLEEP: " << click_sleep << std::endl;
 
+    Block b;
     for(Ray ray(glm::vec3(camera_pos.x, camera_pos.y + 0.5f, camera_pos.z), yaw, pitch); ray.get_length() < 6; ray.step(0.05f)){
         float x = ray.get_end().x;
         float y = ray.get_end().y;
@@ -75,8 +74,7 @@ void Player::update(Blocky *game, double delta){
         int yy = (int) y;
         int zz = (int) z % 16;
 
-        Block b = *world->get_chunk(cx, cz)->get_block(xx, yy, zz);
-       // std::cout << "BLOCK: " << std::to_string(b.get_type()) << "\tL: " << (int)b.get_light() << "\tSKY: " << std::to_string(b.get_is_sky()) << "\tX: " << xx << "\tZ: " << zz << std::endl;
+        b = *world->get_chunk(cx, cz)->get_block(xx, yy, zz);
         
         if(b.get_type() != ID::AIR){
             if(click_sleep >= 0.2f){
@@ -110,6 +108,7 @@ void Player::update(Blocky *game, double delta){
                 }
             }
         }
+        current_block = b;
 
         last_pos = ray.get_end();
     }
@@ -132,12 +131,28 @@ void Player::input(Blocky *game, double delta){
     if(glfwGetKey(game->get_window(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
         camera_pos -= camera_speed * camera_up;
     if(glfwGetKey(game->get_window(), GLFW_KEY_P) == GLFW_PRESS){
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        show_polys = !show_polys;
+        if(show_polys)
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        else
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 }
 
 const glm::vec3& Player::get_pos() const {
     return camera_pos;
+}
+
+const glm::vec2 Player::get_cam_pos() const{
+    return glm::vec2(yaw, pitch);
+}
+
+const bool Player::get_show_polygons() const{
+    return show_polys;
+}
+
+const Block& Player::get_current_block() const {
+    return current_block;
 }
 
 void Player::set_mouse_pos(const double x, const double y){

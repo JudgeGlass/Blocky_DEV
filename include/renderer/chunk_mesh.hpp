@@ -2,6 +2,7 @@
 #define __CHUNK_MESH__
 
 #include <vector>
+#include <memory>
 
 #include <GL/glew.h>
 
@@ -73,9 +74,7 @@ class ChunkMesh{
         void rebuild(Block *blocks);
 
         void render(GLuint texture);
-        void render_transparent(GLuint texture);
 
-        bool is_transparent(int x, int y, int z, unsigned char block_id);
     private:
         int cx;
         int cz;
@@ -102,6 +101,7 @@ class ChunkMesh{
         int light_level_size = 0;
 
         World *world = nullptr;
+        //std::shared_ptr<World> world;
 
         GLuint VAO;
         GLuint VBO;
@@ -117,6 +117,10 @@ class ChunkMesh{
         GLfloat *ttBuff = nullptr;
 
         GLfloat *lBuff = nullptr;
+
+        bool is_transparent(int x, int y, int z, unsigned char block_id);
+        void add_face(int x, int y, int z, Face face, unsigned char type, float light);
+        void add_face_vertices(const float* vertex_array, int x, int y, int z, float light);
 };
 
 #endif

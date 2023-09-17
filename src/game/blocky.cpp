@@ -20,7 +20,8 @@ void Blocky::glfw_mouse_callback(GLFWwindow *window, double xpos, double ypos){
 }
 
 Blocky::Blocky(const int width, const int height){
-    renderer = new Renderer(this);
+    //renderer = new Renderer(this);
+    renderer = std::make_shared<Renderer>(this);
 
     screen_width = width;
     screen_height = height;
@@ -70,9 +71,16 @@ void Blocky::loop(){
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         }
 
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
         renderer->draw();
 
         renderer->update(mouse_x, mouse_y);
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -90,7 +98,7 @@ GLFWwindow* Blocky::get_window() const {
     return window;
 }
 
-Renderer* Blocky::get_renderer() const {
+std::shared_ptr<Renderer> Blocky::get_renderer() const {
     return renderer;
 }
 

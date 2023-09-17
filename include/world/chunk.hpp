@@ -25,7 +25,6 @@ class Chunk{
         void build_lighting();
         void clear_lighting();
         void render(GLuint texture);
-        void render_transparent(GLuint texture);
 
         void set_block(Block b);
 
@@ -47,7 +46,6 @@ class Chunk{
 
         World *world = nullptr;
 
-        //std::vector<Block> blocks;
         Block blocks[16 * 16 * 256];
 
         ChunkMesh *chunk_mesh = nullptr;

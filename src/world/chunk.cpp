@@ -25,8 +25,6 @@ void Chunk::generate(){
             for(int z = 0; z < cl+1; z++){
                 float n = abs(SimplexNoise::noise((float)(x+cx*cw + ((float)rand() / (RAND_MAX))) / 80, (float)(z+cz*cl + ((float)rand() / (RAND_MAX))) / 80) * 12);
                 int l_start = (int)n+ 120;
-                //std::cout << "N: " << n << std::endl;
-
 
                 if(y < 20 && y > 15 ) {
                     blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::AIR, 1, false);
@@ -43,26 +41,11 @@ void Chunk::generate(){
                 }else{
                     blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::AIR, 15, true);
                 }
-                // if(y > 60){
-                //     //blocks.push_back(Block(x, y, z, ID::AIR));
-                //     blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::AIR);
-                // }else if(y == 60){
-                //     //blocks.push_back(Block(x, y, z, ID::GRASS));
-                //     blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::GRASS);
-                // }else if(y > 55){
-                //     //blocks.push_back(Block(x, y, z, ID::DIRT));
-                //     blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::DIRT);
-                // }else{
-                //     //blocks.push_back(Block(x, y, z, ID::STONE));
-                //     blocks[x + y * 16 + z * 16 * 256] = Block(x, y, z, ID::STONE);
-                // }
             }
         }
     }
 
     chunk_mesh = new ChunkMesh(blocks, cx, cz, cw, cl, ch, disable_faces, world);
-    
-    //chunk_mesh->build();
 }
 
 void Chunk::build_mesh(){
@@ -101,16 +84,9 @@ void Chunk::set_disable_faces(bool v){
 }
 
 void Chunk::set_block(Block b){
-    //blocks.at(x + y * 15 + z * 16 * 256).set_type(id);
     blocks[b.get_x() + b.get_y() * 16 + b.get_z() * 16 * 256] = b;
-    //chunk_mesh->build();
 }
-
 
 void Chunk::render(GLuint texture){
     chunk_mesh->render(texture);
-}
-
-void Chunk::render_transparent(GLuint texture){
-    chunk_mesh->render_transparent(texture);
 }
